@@ -9,6 +9,9 @@ export type cpuType = {
     cycle: number
 }
 
+export type op_codes = "69" | "65" | "75" | "6d" | "7d" | "79" | "61" | "71" //ADC codes
+                       
+
 export type address_mode =
     "immediate" | "zero_page" | "zero_page_x" |
     "zero_page_y" | "absolute" | "absolute_x" |

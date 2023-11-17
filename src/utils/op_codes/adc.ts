@@ -22,14 +22,14 @@ export const op_code_75_exec = (cpu: cpuType, arg: number): cpuType => {
     return cpu;
 }
 
-export const op_code_6D_exec = (cpu: cpuType, arg: number): cpuType => {
+export const op_code_6d_exec = (cpu: cpuType, arg: number): cpuType => {
     cpu = adc(cpu, arg, "absolute");
 
     cpu.cycle += 4;
     return cpu;
 }
 
-export const op_code_7D_exec = (cpu: cpuType, arg: number): cpuType => {
+export const op_code_7d_exec = (cpu: cpuType, arg: number): cpuType => {
     cpu = adc(cpu, arg, "absolute_x");
 
     cpu.cycle += 4;

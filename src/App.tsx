@@ -10,10 +10,8 @@ function App() {
 
     return (
         <div className="w-full h-screen bg-gray-600 grid place-items-center">
-            {/* <button onClick={cpu_loop} className="py-4 px-8 bg-white rounded-md">Calcular</button> */}
-
             <div>
-                <span>A: {cpu.a}</span>
+                <button onClick={() => exec_op_code("69", 0x01)} className='bg-white px-4 py-2 rounded-md'>ADC</button>
             </div>
         </div>
     )
