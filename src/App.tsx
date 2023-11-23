@@ -8,6 +8,8 @@ function App() {
         console.log(cpu);
     }, [cpu])
 
+    // ADC setando flag overflow incorretamente
+
     return (
         <div className="w-full h-screen bg-gray-600 grid place-items-center">
             <div>
