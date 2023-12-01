@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useCpu } from "./hooks/useCpu";
+import Monitor from './components/Monitor';
+import Debug from './components/Debug';
 
 function App() {
     const [cpu, exec_op_code] = useCpu();
@@ -8,12 +10,12 @@ function App() {
         console.log(cpu);
     }, [cpu])
 
-    // ADC setando flag overflow incorretamente
-
     return (
         <div className="w-full h-screen bg-gray-600 grid place-items-center">
-            <div>
-                <button onClick={() => exec_op_code("69", 0x01)} className='bg-white px-4 py-2 rounded-md'>ADC</button>
+            <div className='flex gap-4 h-[480px]'>
+                <Monitor />
+
+                <Debug cpu={cpu} />
             </div>
         </div>
     )

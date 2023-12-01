@@ -4,7 +4,7 @@ import instructions from "../utils/instructions";
 
 export function useCpu(): [cpu: cpuType, exec_op_code: (code: op_codes, arg: number) => void] {
     const [cpu, setCpu] = useState<cpuType>({
-        memory: new Array(0xffff),
+        memory: new Array(0xffff).fill(0),
         x: 0x00,
         y: 0x00,
         a: 0x00,
