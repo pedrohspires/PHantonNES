@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react"
 import { minLengthNumber } from "../../utils/format";
 
 export default function Memoria({ mem }: { mem: Array<number> }): JSX.Element {
-    const [start, setStart] = useState<string>("0xff");
+    const [start, setStart] = useState<string>("0x00");
     const [length, setLength] = useState<string>("0xff");
 
     const handleChangeInput = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -24,7 +24,7 @@ export default function Memoria({ mem }: { mem: Array<number> }): JSX.Element {
                             id="mem_start"
                             value={start}
                             onChange={handleChangeInput}
-                            className="w-20 text-black px-2"
+                            className="w-20 text-black px-2 rounded-md"
                         />
                     </div>
 
@@ -34,7 +34,7 @@ export default function Memoria({ mem }: { mem: Array<number> }): JSX.Element {
                             id="mem_length"
                             value={length}
                             onChange={handleChangeInput}
-                            className="w-20 text-black px-2"
+                            className="w-20 text-black px-2 rounded-md"
                         />
                     </div>
                 </div>
@@ -42,11 +42,18 @@ export default function Memoria({ mem }: { mem: Array<number> }): JSX.Element {
 
             <div className="mt-2">
                 {mem.slice(Number(start), Number(start) + Number(length) + 1).map((item, index) => {
-                    console.log((index + Number(start)).toString(16))
                     if (index % 16 == 0)
-                        return <>{index != 0 && <br />}<span className="bg-gray-500 px-1 w-12 inline-block mr-2">{minLengthNumber(index + Number(start), 4, 16)}</span></>
+                        return (
+                            <span key={index}>
+                                {index != 0 && <br />}
+                                <span className="bg-gray-500 px-1 w-12 inline-block mr-2">
+                                    {minLengthNumber(index + Number(start), 4, 16)}
+                                </span>
+                                <span className="inline-block w-7">{minLengthNumber(item, 2, 16)}</span>
+                            </span>
+                        )
 
-                    return <span className="inline-block w-7">{minLengthNumber(item, 2, 16)}</span>
+                    return <span key={index} className="inline-block w-7">{minLengthNumber(item, 2, 16)}</span>
                 })}
             </div>
         </div>

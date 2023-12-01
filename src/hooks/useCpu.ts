@@ -18,7 +18,7 @@ export function useCpu(): [cpu: cpuType, exec_op_code: (code: op_codes, arg: num
         let cpuTemp = cpu;
 
         cpu.a = 0xff;
-        cpu.memory[0x00] = 0x01;
+        cpu.memory[0x03] = 0x03;
 
         setCpu({ ...cpuTemp });
     }, []);

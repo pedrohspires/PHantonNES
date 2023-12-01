@@ -10,8 +10,13 @@ function App() {
         console.log(cpu);
     }, [cpu])
 
+    function handleClick(): void {
+        exec_op_code("65", 3)
+    }
+
     return (
         <div className="w-full h-screen bg-gray-600 grid place-items-center">
+            <button onClick={handleClick} className='bg-white rounded-md p-2'>Executar</button>
             <div className='flex gap-4 h-[480px]'>
                 <Monitor />
 
