@@ -1,28 +1,17 @@
 import { useEffect, useState } from "react";
 import { cpuType, op_codes } from "../types/cpu.d";
-import { clearZeroFlag, setZeroFlag } from "../utils/bit_operations";
+import { clearZeroFlag, setZeroFlag } from "../utils/flags_operations";
+import { initial_cpu } from "../utils/initial_states";
 import instructions from "../utils/instructions";
 
-export function useCpu(): { cpu: cpuType, exec_op_code: (code: op_codes, arg: number) => void } {
-    const [cpu, setCpu] = useState<cpuType>({
-        memory: new Array(0xffff).fill(0),
-        x: 0x00,
-        y: 0x00,
-        a: 0x00,
-        sp: 0x00,
-        pc: 0x0000,
-        p: "00000000", // CZIDB-VN
-        cycle: 0x0000,
-    })
+type useCpuReturn = {
+    cpu: cpuType,
+    exec_op_code: (code: op_codes, arg: number) => void,
+    reset_cpu: () => void
+}
 
-    useEffect(() => {
-        let cpuTemp = cpu;
-
-        cpu.a = 0xff;
-        cpu.memory[0x03] = 0x03;
-
-        setCpu({ ...cpuTemp });
-    }, []);
+export function useCpu(): useCpuReturn {
+    const [cpu, setCpu] = useState<cpuType>(initial_cpu)
 
     useEffect(() => {
         cpu.p = cpu.a == 0 ? setZeroFlag(cpu.p) : clearZeroFlag(cpu.p);
@@ -34,5 +23,9 @@ export function useCpu(): { cpu: cpuType, exec_op_code: (code: op_codes, arg: nu
         setCpu({ ...cpuTemp });
     }
 
-    return { cpu, exec_op_code };
+    const reset_cpu = () => {
+        setCpu({ ...initial_cpu });
+    }
+
+    return { cpu, exec_op_code, reset_cpu };
 }

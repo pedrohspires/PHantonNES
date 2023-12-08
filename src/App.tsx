@@ -6,7 +6,7 @@ import { useCpu } from "./hooks/useCpu";
 import { op_codes } from './types/cpu.d';
 
 function App() {
-    const { cpu, exec_op_code } = useCpu();
+    const { cpu, exec_op_code, reset_cpu } = useCpu();
 
     const [opCode, setOpCode] = useState<string>("");
     const [arg, setArg] = useState<string>("0x");
@@ -38,7 +38,10 @@ function App() {
                 />
             </div>
 
-            <button onClick={e => { e.preventDefault(); handleClick() }} className='bg-white rounded-md p-2'>Executar</button>
+            <div className='flex gap-4'>
+                <button onClick={e => { e.preventDefault(); handleClick() }} className='bg-white rounded-md p-2'>Executar</button>
+                <button onClick={e => { e.preventDefault(); reset_cpu() }} className='bg-white rounded-md p-2'>Reset</button>
+            </div>
             <div className='flex gap-4 h-[480px]'>
                 <Monitor />
 
