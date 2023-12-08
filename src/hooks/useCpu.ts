@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { cpuType, op_codes } from "../types/cpu.d";
+import { cpuType, op_codes_type } from "../types/cpu.d";
 import { clearZeroFlag, setZeroFlag } from "../utils/flags_operations";
 import { initial_cpu } from "../utils/initial_states";
-import instructions from "../utils/instructions";
+import op_codes from "../utils/op_codes";
 
 type useCpuReturn = {
     cpu: cpuType,
-    exec_op_code: (code: op_codes, arg: number) => void,
+    exec_op_code: (code: op_codes_type, arg: number) => void,
     reset_cpu: () => void
 }
 
@@ -18,8 +18,8 @@ export function useCpu(): useCpuReturn {
         setCpu({ ...cpu });
     }, [cpu.a]);
 
-    const exec_op_code = (code: op_codes, arg: number): void => {
-        let cpuTemp = instructions[code](cpu, arg);
+    const exec_op_code = (code: op_codes_type, arg: number): void => {
+        let cpuTemp = op_codes[code](cpu, arg);
         setCpu({ ...cpuTemp });
     }
 

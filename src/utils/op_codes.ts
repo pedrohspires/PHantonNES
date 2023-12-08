@@ -10,7 +10,7 @@ import {
     op_code_7d_exec
 } from "./op_codes/adc";
 
-const instructions = {
+const op_codes = {
     "69": op_code_69_exec,
     "65": op_code_65_exec,
     "75": op_code_75_exec,
@@ -21,4 +21,4 @@ const instructions = {
     "71": op_code_71_exec,
 }
 
-export default instructions;
+export default op_codes;

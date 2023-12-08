@@ -3,7 +3,7 @@ import Debug from './components/Debug';
 import Input from './components/Input';
 import Monitor from './components/Monitor';
 import { useCpu } from "./hooks/useCpu";
-import { op_codes } from './types/cpu.d';
+import { op_codes_type } from './types/cpu.d';
 
 function App() {
     const { cpu, exec_op_code, reset_cpu } = useCpu();
@@ -16,7 +16,7 @@ function App() {
     }, [cpu])
 
     function handleClick(): void {
-        exec_op_code((opCode as op_codes), Number(arg))
+        exec_op_code((opCode as op_codes_type), Number(arg))
     }
 
 
