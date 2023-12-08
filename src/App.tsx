@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useCpu } from "./hooks/useCpu";
-import Monitor from './components/Monitor';
 import Debug from './components/Debug';
 import Input from './components/Input';
+import Monitor from './components/Monitor';
+import { useCpu } from "./hooks/useCpu";
+import { op_codes } from './types/cpu.d';
 
 function App() {
     const { cpu, exec_op_code } = useCpu();
 
     const [opCode, setOpCode] = useState<string>("");
-    const [arg, setArg] = useState<string>("");
+    const [arg, setArg] = useState<string>("0x");
 
     useEffect(() => {
         console.log(cpu);
     }, [cpu])
 
     function handleClick(): void {
-        exec_op_code("69", 0x0f)
+        exec_op_code((opCode as op_codes), Number(arg))
     }
 
 
@@ -33,7 +34,7 @@ function App() {
                     id='arg'
                     label='arg'
                     value={arg}
-                    onChange={setArg}
+                    onChange={(value) => setArg(value.length >= 2 ? value : arg)}
                 />
             </div>
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { cpuType, op_codes } from "../types/cpu.d";
-import instructions from "../utils/instructions";
 import { clearZeroFlag, setZeroFlag } from "../utils/bit_operations";
+import instructions from "../utils/instructions";
 
 export function useCpu(): { cpu: cpuType, exec_op_code: (code: op_codes, arg: number) => void } {
     const [cpu, setCpu] = useState<cpuType>({
@@ -26,6 +26,7 @@ export function useCpu(): { cpu: cpuType, exec_op_code: (code: op_codes, arg: nu
 
     useEffect(() => {
         cpu.p = cpu.a == 0 ? setZeroFlag(cpu.p) : clearZeroFlag(cpu.p);
+        setCpu({ ...cpu });
     }, [cpu.a]);
 
     const exec_op_code = (code: op_codes, arg: number): void => {

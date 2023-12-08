@@ -20,6 +20,7 @@ export default function Debug({ cpu }: Props) {
                 <div className="col-span-full w-full flex justify-evenly">
                     <Register label="PC" value={cpu.pc} />
                     <Register label="SP" value={cpu.sp} minLength={2} />
+                    <Register label="Cycle" value={cpu.cycle} />
                 </div>
 
                 <div className="col-span-full w-full content-center">

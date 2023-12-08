@@ -12,7 +12,7 @@ export default function Register({ label, value, minLength = 4 }: Props) {
     return (
         <div className="text-center">
             <p>{label}</p>
-            <input className="text-black rounded-sm px-2 w-20 text-center bg-gray-50" defaultValue={valueFormat} value={valueFormat} />
+            <div className="text-black rounded-sm px-2 w-20 text-center bg-gray-50 cursor-default">{valueFormat}</div>
         </div>
     )
 }
