@@ -3,7 +3,7 @@ import { cpuType, op_codes } from "../types/cpu.d";
 import instructions from "../utils/instructions";
 import { clearZeroFlag, setZeroFlag } from "../utils/bit_operations";
 
-export function useCpu(): [cpu: cpuType, exec_op_code: (code: op_codes, arg: number) => void] {
+export function useCpu(): { cpu: cpuType, exec_op_code: (code: op_codes, arg: number) => void } {
     const [cpu, setCpu] = useState<cpuType>({
         memory: new Array(0xffff).fill(0),
         x: 0x00,
@@ -33,5 +33,5 @@ export function useCpu(): [cpu: cpuType, exec_op_code: (code: op_codes, arg: num
         setCpu({ ...cpuTemp });
     }
 
-    return [cpu, exec_op_code];
+    return { cpu, exec_op_code };
 }

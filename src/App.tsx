@@ -5,7 +5,7 @@ import Debug from './components/Debug';
 import Input from './components/Input';
 
 function App() {
-    const [cpu, exec_op_code] = useCpu();
+    const { cpu, exec_op_code } = useCpu();
 
     const [opCode, setOpCode] = useState<string>("");
     const [arg, setArg] = useState<string>("");
@@ -15,7 +15,7 @@ function App() {
     }, [cpu])
 
     function handleClick(): void {
-        exec_op_code("61", 0x01)
+        exec_op_code("69", 0x0f)
     }
 
 
@@ -37,7 +37,7 @@ function App() {
                 />
             </div>
 
-            <button onClick={e => { e.preventDefault; handleClick() }} className='bg-white rounded-md p-2'>Executar</button>
+            <button onClick={e => { e.preventDefault(); handleClick() }} className='bg-white rounded-md p-2'>Executar</button>
             <div className='flex gap-4 h-[480px]'>
                 <Monitor />
 

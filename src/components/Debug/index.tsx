@@ -1,4 +1,4 @@
-import { cpuType } from "../../types/cpu.d"
+import { cpuType } from "../../types/cpu.d";
 import Flags from "../Flags";
 import Memoria from "../Memoria";
 import Register from "../Register";
