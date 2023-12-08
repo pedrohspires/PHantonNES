@@ -1,6 +1,6 @@
 import { address_mode, cpuType } from "../../types/cpu.d";
 import address_resolve from "../address";
-import { clearCarryFlag, setCarryFlag, setNegativeFlag, setOverflowFlag, setZeroFlag } from "../bit_operations";
+import { clearCarryFlag, setCarryFlag, setNegativeFlag, setOverflowFlag } from "../bit_operations";
 import { decToBin } from "../convertions";
 import { isOverflow } from "../validations";
 
@@ -16,9 +16,6 @@ export const adc = (cpu: cpuType, arg: number, address_mode: address_mode): cpuT
         cpu.p = setCarryFlag(cpu.p);
         cpu.a -= 0x100;
     } else cpu.p = clearCarryFlag(cpu.p);
-
-    if (cpu.a == 0)
-        cpu.p = setZeroFlag(cpu.p);
 
     if (decToBin(cpu.a)[0] === '1')
         cpu.p = setNegativeFlag(cpu.p);

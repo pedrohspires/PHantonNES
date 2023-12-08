@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from "react"
 import { minLengthNumber } from "../../utils/format";
+import Input from "../Input";
 
 export default function Memoria({ mem }: { mem: Array<number> }): JSX.Element {
     const [start, setStart] = useState<string>("0x00");
@@ -18,25 +19,18 @@ export default function Memoria({ mem }: { mem: Array<number> }): JSX.Element {
                 <span>Memória</span>
 
                 <div className="flex gap-2">
-                    <div>
-                        <label htmlFor="mem_start">Início: </label>
-                        <input
-                            id="mem_start"
-                            value={start}
-                            onChange={handleChangeInput}
-                            className="w-20 text-black px-2 rounded-md"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="mem_length">Tamanho: </label>
-                        <input
-                            id="mem_length"
-                            value={length}
-                            onChange={handleChangeInput}
-                            className="w-20 text-black px-2 rounded-md"
-                        />
-                    </div>
+                    <Input
+                        id="mem_start"
+                        label="Início"
+                        value={start}
+                        onChange={handleChangeInput}
+                    />
+                    <Input
+                        id="mem_length"
+                        label="Tamanho"
+                        value={length}
+                        onChange={handleChangeInput}
+                    />
                 </div>
             </div>
 
