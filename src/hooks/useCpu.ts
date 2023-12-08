@@ -13,6 +13,16 @@ type useCpuReturn = {
 export function useCpu(): useCpuReturn {
     const [cpu, setCpu] = useState<cpuType>(initial_cpu)
 
+
+    useEffect(() => {
+        let cpuTemp = cpu;
+
+        cpuTemp.memory[0x03] = 0x0a;
+        cpuTemp.a = 0x0a;
+
+        setCpu(cpuTemp);
+    }, []);
+
     useEffect(() => {
         cpu.p = cpu.a == 0 ? setZeroFlag(cpu.p) : clearZeroFlag(cpu.p);
         setCpu({ ...cpu });
