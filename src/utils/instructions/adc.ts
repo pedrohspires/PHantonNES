@@ -4,7 +4,7 @@ import { clearCarryFlag, clearNegativeFlag, clearOverflowFlag, setCarryFlag, set
 import { isOverflow } from "../validations";
 
 export const adc = (cpu: cpuType, arg: number, address_mode: address_mode): cpuType => {
-    let content_to_add = address_mode == "immediate" ? arg : cpu.memory[address_resolve(cpu, arg, address_mode)];
+    let content_to_add = address_mode == "immediate" ? arg : cpu.memory[address_resolve(cpu, arg, address_mode, true)];
     let carry = Number(cpu.p[0]);
 
     if (isOverflow(cpu.a, content_to_add, carry)) cpu.p = setOverflowFlag(cpu.p);

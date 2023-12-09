@@ -1,6 +1,11 @@
 import { address_mode, cpuType } from "../types/cpu.d";
 
-export default function address_resolve(cpu: cpuType, arg: number, address_mode: address_mode): number {
+function page_crossed(cpu: cpuType, addr1: number, addr2: number, cycles: number = 1) {
+    if (addr1.toString(16).slice(0, 2) != addr2.toString(16))
+        cpu.cycle += cycles;
+}
+
+export default function address_resolve(cpu: cpuType, arg: number, address_mode: address_mode, ignore_page_crossed: boolean = false): number {
     switch (address_mode) {
         case "zero_page": return arg;
         case "zero_page_x": return cpu.memory[arg] + cpu.x;
@@ -11,8 +16,8 @@ export default function address_resolve(cpu: cpuType, arg: number, address_mode:
             let memory_value = cpu.memory[arg];
             let address = memory_value + cpu.x;
 
-            if (address.toString(16).slice(0, 2) != memory_value.toString(16))
-                cpu.cycle++;
+            if (!ignore_page_crossed)
+                page_crossed(cpu, address, memory_value);
 
             return address;
         };
@@ -21,8 +26,8 @@ export default function address_resolve(cpu: cpuType, arg: number, address_mode:
             let memory_value = cpu.memory[arg];
             let address = memory_value + cpu.y;
 
-            if (address.toString(16).slice(0, 2) != memory_value.toString(16))
-                cpu.cycle++;
+            if (!ignore_page_crossed)
+                page_crossed(cpu, address, memory_value)
 
             return address;
         };
@@ -42,8 +47,13 @@ export default function address_resolve(cpu: cpuType, arg: number, address_mode:
 
         case "indirect_y": {
             let zero_page_y_address = cpu.memory[arg] + cpu.y;
+
+            if (!ignore_page_crossed)
+                page_crossed(cpu, zero_page_y_address, cpu.memory[arg])
+
             let byte_least_significant = cpu.memory[zero_page_y_address];
             let byte_most_significant = cpu.memory[zero_page_y_address + 1];
+
             return Number("0x" + byte_most_significant.toString(16) + byte_least_significant.toString(16));
         };
     }
