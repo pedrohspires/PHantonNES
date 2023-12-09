@@ -4,6 +4,9 @@ import * as and_op_codes from "./op_codes/and";
 import * as lda_op_codes from "./op_codes/lda";
 import * as ldx_op_codes from "./op_codes/ldx";
 import * as ldy_op_codes from "./op_codes/ldy";
+import * as sta_op_codes from "./op_codes/sta";
+import * as stx_op_codes from "./op_codes/stx";
+import * as sty_op_codes from "./op_codes/sty";
 
 const op_codes = {
     // adc
@@ -49,6 +52,25 @@ const op_codes = {
     "b4": ldy_op_codes.op_code_b4_exec,
     "ac": ldy_op_codes.op_code_ac_exec,
     "bc": ldy_op_codes.op_code_bc_exec,
+
+    // sta
+    "85": sta_op_codes.op_code_85_exec,
+    "95": sta_op_codes.op_code_95_exec,
+    "8d": sta_op_codes.op_code_8d_exec,
+    "9d": sta_op_codes.op_code_9d_exec,
+    "99": sta_op_codes.op_code_99_exec,
+    "81": sta_op_codes.op_code_81_exec,
+    "91": sta_op_codes.op_code_91_exec,
+
+    // stx
+    "86": stx_op_codes.op_code_86_exec,
+    "96": stx_op_codes.op_code_96_exec,
+    "8e": stx_op_codes.op_code_8e_exec,
+
+    // sty
+    "84": sty_op_codes.op_code_84_exec,
+    "94": sty_op_codes.op_code_94_exec,
+    "8c": sty_op_codes.op_code_8c_exec,
 }
 
 export default op_codes;

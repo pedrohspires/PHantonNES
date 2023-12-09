@@ -16,7 +16,7 @@ export const op_code_a6_exec = (cpu: cpuType, arg: number): cpuType => {
 }
 
 export const op_code_b6_exec = (cpu: cpuType, arg: number): cpuType => {
-    cpu = ldx(cpu, arg, "zero_page_x");
+    cpu = ldx(cpu, arg, "zero_page_y");
 
     cpu.cycle += 4;
     return cpu;
