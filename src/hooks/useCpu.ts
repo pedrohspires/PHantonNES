@@ -13,7 +13,6 @@ type useCpuReturn = {
 export function useCpu(): useCpuReturn {
     const [cpu, setCpu] = useState<cpuType>(initial_cpu)
 
-
     useEffect(() => {
         let cpuTemp = cpu;
 

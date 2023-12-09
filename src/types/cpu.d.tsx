@@ -9,8 +9,12 @@ export type cpuType = {
     cycle: number
 }
 
-export type op_codes_type = "69" | "65" | "75" | "6d" | "7d" | "79" | "61" | "71" //ADC codes
-
+export type op_codes_type =
+    "69" | "65" | "75" | "6d" | "7d" | "79" | "61" | "71" | // ADC
+    "29" | "25" | "35" | "2d" | "3d" | "39" | "21" | "31" | // AND
+    "a9" | "a5" | "b5" | "ad" | "bd" | "b9" | "a1" | "b1" | // LDA
+    "a2" | "a6" | "b6" | "ae" | "be" |                      // LDX
+    "a0" | "a4" | "b4" | "ac" | "bc"                        // LDY
 
 export type address_mode =
     "immediate" | "zero_page" | "zero_page_x" |
