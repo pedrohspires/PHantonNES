@@ -8,8 +8,21 @@ function page_crossed(cpu: cpuType, addr1: number, addr2: number, cycles: number
 export default function address_resolve(cpu: cpuType, arg: number, address_mode: address_mode, ignore_page_crossed: boolean = false): number {
     switch (address_mode) {
         case "zero_page": return arg;
-        case "zero_page_x": return cpu.memory[arg] + cpu.x;
-        case "zero_page_y": return cpu.memory[arg] + cpu.y;
+
+        case "zero_page_x": {
+            let addr = cpu.memory[arg] + cpu.x;
+            if (addr > 0xff) addr -= 0x100;
+
+            return addr;
+        };
+
+        case "zero_page_y": {
+            let addr = cpu.memory[arg] + cpu.y;
+            if (addr > 0xff) addr -= 0x100;
+
+            return addr;
+        };
+
         case "absolute": return arg;
 
         case "absolute_x": {

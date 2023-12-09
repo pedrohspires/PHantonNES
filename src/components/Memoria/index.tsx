@@ -1,17 +1,10 @@
-import { ChangeEvent, useState } from "react"
+import { useState } from "react";
 import { minLengthNumber } from "../../utils/format";
 import Input from "../Input";
 
 export default function Memoria({ mem }: { mem: Array<number> }): JSX.Element {
     const [start, setStart] = useState<string>("0x00");
     const [length, setLength] = useState<string>("0xff");
-
-    const handleChangeInput = (event: ChangeEvent<HTMLInputElement>): void => {
-        if (event.target.value.length > 1 && event.target.value.length < 7) {
-            if (event.target.id == "mem_start") setStart(event.target.value)
-            else setLength(event.target.value);
-        }
-    }
 
     return (
         <div className="p-1 border border-gray-200 h-full">
@@ -23,13 +16,13 @@ export default function Memoria({ mem }: { mem: Array<number> }): JSX.Element {
                         id="mem_start"
                         label="Início"
                         value={start}
-                        onChange={handleChangeInput}
+                        onChange={setStart}
                     />
                     <Input
                         id="mem_length"
                         label="Tamanho"
                         value={length}
-                        onChange={handleChangeInput}
+                        onChange={setLength}
                     />
                 </div>
             </div>
