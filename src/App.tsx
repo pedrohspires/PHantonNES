@@ -19,6 +19,16 @@ function App() {
         exec_op_code((opCode as op_codes_type), Number(arg))
     }
 
+    function run_program() {
+        exec_op_code("a0", 0x01);
+        exec_op_code("a9", 0x03);
+        exec_op_code("85", 0x01);
+        exec_op_code("a9", 0x07);
+        exec_op_code("85", 0x02);
+        exec_op_code("a2", 0x0a);
+        exec_op_code("86", 0x0704);
+        exec_op_code("b1", 0x01);
+    }
 
     return (
         <div className="w-full h-screen bg-gray-600 grid place-items-center">
@@ -39,6 +49,7 @@ function App() {
             </div>
 
             <div className='flex gap-4'>
+                <button onClick={e => { e.preventDefault(); run_program() }} className='bg-white rounded-md p-2'>Executar programa</button>
                 <button onClick={e => { e.preventDefault(); handleClick() }} className='bg-white rounded-md p-2'>Executar</button>
                 <button onClick={e => { e.preventDefault(); reset_cpu() }} className='bg-white rounded-md p-2'>Reset</button>
             </div>

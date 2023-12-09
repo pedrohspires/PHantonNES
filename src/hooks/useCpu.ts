@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { cpuType, op_codes_type } from "../types/cpu.d";
+import { innitial_state_cpu } from "../utils/debug";
 import { clearZeroFlag, setZeroFlag } from "../utils/flags_operations";
 import { initial_cpu } from "../utils/initial_states";
 import op_codes from "../utils/op_codes";
@@ -14,12 +15,7 @@ export function useCpu(): useCpuReturn {
     const [cpu, setCpu] = useState<cpuType>(initial_cpu)
 
     useEffect(() => {
-        let cpuTemp = cpu;
-
-        cpuTemp.memory[0x03] = 0x0a;
-        cpuTemp.a = 0x0a;
-
-        setCpu(cpuTemp);
+        setCpu(innitial_state_cpu());
     }, []);
 
     useEffect(() => {
@@ -33,7 +29,7 @@ export function useCpu(): useCpuReturn {
     }
 
     const reset_cpu = () => {
-        setCpu({ ...initial_cpu });
+        setCpu({ ...innitial_state_cpu() });
     }
 
     return { cpu, exec_op_code, reset_cpu };

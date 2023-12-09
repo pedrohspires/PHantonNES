@@ -1,7 +1,11 @@
 import { address_mode, cpuType } from "../types/cpu.d";
+import { minLengthNumber } from "./format";
 
 function page_crossed(cpu: cpuType, addr1: number, addr2: number, cycles: number = 1) {
-    if (addr1.toString(16).slice(0, 2) != addr2.toString(16))
+    let addr1_16_bits = minLengthNumber(addr1, 4, 16);
+    let addr2_16_bits = minLengthNumber(addr2, 4, 16);
+
+    if (addr1_16_bits.slice(0, 2) != addr2_16_bits.slice(0, 2))
         cpu.cycle += cycles;
 }
 
@@ -53,21 +57,22 @@ export default function address_resolve(cpu: cpuType, arg: number, address_mode:
 
         case "indirect_x": {
             let zero_page_x_address = cpu.memory[arg] + cpu.x;
-            let byte_least_significant = cpu.memory[zero_page_x_address];
-            let byte_most_significant = cpu.memory[zero_page_x_address + 1];
-            return Number("0x" + byte_most_significant.toString(16) + byte_least_significant.toString(16));
+            let byte_least_significant = minLengthNumber(cpu.memory[zero_page_x_address], 2, 16);
+            let byte_most_significant = minLengthNumber(cpu.memory[zero_page_x_address + 1], 2, 16);
+            return Number("0x" + byte_most_significant + byte_least_significant);
         };
 
         case "indirect_y": {
-            let zero_page_y_address = cpu.memory[arg] + cpu.y;
+            let byte_least_significant = minLengthNumber(cpu.memory[arg], 2, 16);
+            let byte_most_significant = minLengthNumber(cpu.memory[arg + 1], 2, 16);
+            let resolved_address = Number("0x" + byte_most_significant + byte_least_significant);
+
+            let address = resolved_address + cpu.y;
 
             if (!ignore_page_crossed)
-                page_crossed(cpu, zero_page_y_address, cpu.memory[arg])
+                page_crossed(cpu, resolved_address, address)
 
-            let byte_least_significant = cpu.memory[zero_page_y_address];
-            let byte_most_significant = cpu.memory[zero_page_y_address + 1];
-
-            return Number("0x" + byte_most_significant.toString(16) + byte_least_significant.toString(16));
+            return address;
         };
     }
 
