@@ -14,14 +14,14 @@ export default function address_resolve(cpu: cpuType, arg: number, address_mode:
         case "zero_page": return arg;
 
         case "zero_page_x": {
-            let addr = cpu.memory[arg] + cpu.x;
+            let addr = arg + cpu.x;
             if (addr > 0xff) addr -= 0x100;
 
             return addr;
         };
 
         case "zero_page_y": {
-            let addr = cpu.memory[arg] + cpu.y;
+            let addr = arg + cpu.y;
             if (addr > 0xff) addr -= 0x100;
 
             return addr;
@@ -30,21 +30,19 @@ export default function address_resolve(cpu: cpuType, arg: number, address_mode:
         case "absolute": return arg;
 
         case "absolute_x": {
-            let memory_value = cpu.memory[arg];
-            let address = memory_value + cpu.x;
+            let address = arg + cpu.x;
 
             if (!ignore_page_crossed)
-                page_crossed(cpu, address, memory_value);
+                page_crossed(cpu, address, arg);
 
             return address;
         };
 
         case "absolute_y": {
-            let memory_value = cpu.memory[arg];
-            let address = memory_value + cpu.y;
+            let address = arg + cpu.y;
 
             if (!ignore_page_crossed)
-                page_crossed(cpu, address, memory_value)
+                page_crossed(cpu, address, arg)
 
             return address;
         };
@@ -56,7 +54,7 @@ export default function address_resolve(cpu: cpuType, arg: number, address_mode:
         };
 
         case "indirect_x": {
-            let zero_page_x_address = cpu.memory[arg] + cpu.x;
+            let zero_page_x_address = arg + cpu.x;
             let byte_least_significant = minLengthNumber(cpu.memory[zero_page_x_address], 2, 16);
             let byte_most_significant = minLengthNumber(cpu.memory[zero_page_x_address + 1], 2, 16);
             return Number("0x" + byte_most_significant + byte_least_significant);

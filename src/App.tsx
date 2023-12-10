@@ -20,14 +20,7 @@ function App() {
     }
 
     function run_program() {
-        exec_op_code("a0", 0x01);
-        exec_op_code("a9", 0x03);
-        exec_op_code("85", 0x01);
-        exec_op_code("a9", 0x07);
-        exec_op_code("85", 0x02);
-        exec_op_code("a2", 0x0a);
-        exec_op_code("86", 0x0704);
-        exec_op_code("b1", 0x01);
+
     }
 
     return (
