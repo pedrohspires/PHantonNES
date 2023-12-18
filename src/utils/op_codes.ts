@@ -1,6 +1,7 @@
 // adc op codes
 import * as adc_op_codes from "./op_codes/adc";
 import * as and_op_codes from "./op_codes/and";
+import * as asl_op_codes from "./op_codes/asl";
 import * as lda_op_codes from "./op_codes/lda";
 import * as ldx_op_codes from "./op_codes/ldx";
 import * as ldy_op_codes from "./op_codes/ldy";
@@ -28,6 +29,13 @@ const op_codes = {
     "39": and_op_codes.op_code_39_exec,
     "21": and_op_codes.op_code_21_exec,
     "31": and_op_codes.op_code_31_exec,
+
+    // asl
+    "0a": asl_op_codes.op_code_0a_exec,
+    "06": asl_op_codes.op_code_06_exec,
+    "16": asl_op_codes.op_code_16_exec,
+    "0e": asl_op_codes.op_code_0e_exec,
+    "1e": asl_op_codes.op_code_1e_exec,
 
     // lda
     "a9": lda_op_codes.op_code_a9_exec,
