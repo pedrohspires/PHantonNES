@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import cpuContext from "../../context/cpuContext";
 import Flags from "../Flags";
+import Memory from "../Memory";
 import Register from "../Register";
 
 export default function Debug() {
     const cpu = useContext(cpuContext);
 
     return (
-        <div className="w-1/3 h-2/3 relative bg-sky-800 rounded-md p-4 flex flex-col gap-4">
+        <div className="w-3/6 h-2/3 relative bg-sky-800 rounded-md p-4 flex flex-col gap-4">
             <div className="w-full flex justify-evenly">
                 <Register value={cpu !== null ? cpu?.a : null} label="A" />
                 <Register value={cpu !== null ? cpu?.x : null} label="X" />
@@ -20,6 +21,8 @@ export default function Debug() {
             </div>
 
             <Flags />
+
+            <Memory />
         </div>
     )
 }
