@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import cpuContext from "../../context/cpuContext";
+import Flags from "../Flags";
 import Register from "../Register";
 
 export default function Debug() {
@@ -17,6 +18,8 @@ export default function Debug() {
                 <Register value={cpu !== null ? cpu?.pc : null} label="PC" is16Bits />
                 <Register value={cpu !== null ? cpu?.sp : null} label="SP" is16Bits />
             </div>
+
+            <Flags />
         </div>
     )
 }
