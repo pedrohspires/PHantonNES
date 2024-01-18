@@ -7,7 +7,7 @@ export default function Flags() {
 
     const renderFlag = (value: string, label: string): JSX.Element => {
         return (
-            <div className="w-8 text-center">
+            <div className="w-8 text-center" key={label}>
                 <span className="font-bold text-white">{label}</span>
                 <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center font-bold cursor-default">
                     {value}

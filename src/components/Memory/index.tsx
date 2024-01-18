@@ -29,7 +29,11 @@ export default function Memory() {
                             id="length"
                             className="px-2 rounded-md w-12"
                             value={length.toString(16)}
-                            onChange={e => setLength(Number("0x" + (e.target.value || 0)))}
+                            onChange={e => {
+                                var number = Number("0x" + (e.target.value || 0));
+                                if (number <= 0xff)
+                                    setLength(number);
+                            }}
                         />
                     </div>
                 </div>
@@ -46,23 +50,23 @@ export default function Memory() {
                 {start % 16 != 0 && (
                     <>
                         <span className="p-1 col-span-2 text-center bg-sky-950 text-white font-bold">0x{formatNumber((start - (start % 16)))} </span>
-                        {new Array(start % 16).fill(0).map(() => {
+                        {new Array(start % 16).fill(0).map((_, index) => {
                             return (
-                                <span>-</span>
+                                <span key={index}>-</span>
                             )
                         })}
                     </>
                 )}
 
                 {new Array(length).fill(0).map((_, index) => {
-                    const result = <span>{formatNumber(cpu?.memory[start + index] || 0, 2)}</span>;
+                    const result = <span key={index} className="text-white">{formatNumber(cpu?.memory[start + index] || 0, 2)}</span>;
 
                     if ((index + start) % 16 == 0)
                         return (
-                            <>
-                                <span className="p-1  col-span-2 text-center bg-sky-950 text-white font-bold">0x{formatNumber((index + start))} </span>
+                            <div key={index + "_row_header"} className="col-span-3 flex items-center gap-2">
+                                <span className="p-1 col-span-2 text-center bg-sky-950 text-white font-bold">0x{formatNumber((index + start))} </span>
                                 {result}
-                            </>
+                            </div>
                         );
 
                     return result;
