@@ -1,71 +1,92 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Debug from "./components/Debug";
 import { CpuContextProvider } from "./context/cpuContext";
-import { cpuType } from "./types/cpu.d";
+import useCpu from "./hooks/useCpu";
 
 function Emulador() {
-    const [cpu, setCpu] = useState<cpuType | null>({
-        memory: new Array(0xffff).fill(0),
-        a: 0,
-        x: 0,
-        y: 0,
-        pc: 0xc000,
-        sp: 0x01ff,
-        clock: 0,
-        p: "00000000" //CZIDB-VN
-    });
+    const [cpu, init] = useCpu();
     // const [opCode, setOpCode] = useState<number>(0x00);
 
-    useEffect(() => loop(), []);
+    useEffect(() => {
 
-    const loop = () => {
-        // while (true) {
-        //     setOpCode(cpu?.memory[cpu.pc] || -1);
+    }, []);
 
-        //     if (opCode == -1)
-        //         break;
+    // const loop = () => {
+    //     // while (true) {
+    //     //     setOpCode(cpu?.memory[cpu.pc] || -1);
 
-        //     execInstruction();
-        // }
-        execInstruction();
-    }
+    //     //     if (opCode == -1)
+    //     //         break;
 
-    const execInstruction = () => {
-        if (cpu) {
-            let cpuTemp = cpu;
-            cpuTemp.memory[0x0003] = 0xff;
-            setCpu({ ...cpuTemp })
-        }
+    //     //     execInstruction();
+    //     // }
+    //     execInstruction();
+    // }
 
-        updateMemoryMirrors(0x0003);
-    }
+    // const getInicialStateCpu = (): cpuType | undefined => {
+    //     if (cpu) {
+    //         setMemory(0x0003, 0xff);
+    //     }
+    // }
 
-    const updateMemoryMirrors = (addr: number) => {
-        let cpuTemp = cpu;
+    // const execInstruction = () => {
+    //     const inicialStateCpu = getInicialStateCpu();
+    //     if (inicialStateCpu)
+    //         setCpu({ ...inicialStateCpu })
+    // }
 
-        if (cpuTemp) {
-            if (addr < 0x0800) {
-                while (addr < 0x2000) {
-                    cpuTemp.memory[addr + 0x0800] = cpuTemp?.memory[addr];
-                    addr += 0x0800;
+    // const setMemory = (addr: number, value: number) => {
+    //     let cpuTemp = cpu;
+    //     if (cpuTemp) {
+    //         cpuTemp.memory[addr] = value;
+    //         updateMemoryMirrors(addr);
+    //     }
+    // }
+
+    // const updateMemoryMirrors = (addr: number) => {
+    //     let cpuTemp = cpu;
+
+    //     if (cpuTemp) {
+    //         if (addr < 0x0800) {
+    //             while (addr < 0x2000) {
+    //                 cpuTemp.memory[addr + 0x0800] = cpuTemp?.memory[addr];
+    //                 addr += 0x0800;
+    //             }
+    //             setCpu({ ...cpuTemp });
+    //             return;
+    //         }
+
+    //         if (addr >= 0x2000 && addr <= 0x2007) {
+    //             while (addr < 0x4000) {
+    //                 cpuTemp.memory[addr + 0x8] = cpuTemp?.memory[addr];
+    //                 addr += 0x8;
+    //             }
+    //             setCpu({ ...cpuTemp });
+    //             return;
+    //         }
+    //     }
+    // }
+
+    const handleRomSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        if (event.target.files && event.target.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = event => {
+                if (event.target?.result) {
+                    const rom = new Uint8Array(event.target?.result as ArrayBuffer);
+                    init(rom);
                 }
-                setCpu({ ...cpuTemp });
-                return;
             }
 
-            if (addr >= 0x2000 && addr <= 0x2007) {
-                while (addr < 0x4000) {
-                    cpuTemp.memory[addr + 0x8] = cpuTemp?.memory[addr];
-                    addr += 0x8;
-                }
-                setCpu({ ...cpuTemp });
-                return;
-            }
+            reader.readAsArrayBuffer(event.target.files[0]);
         }
     }
 
     return (
         <CpuContextProvider value={cpu}>
+            <input type="file" onChange={handleRomSelect} accept=".nes" />
+
             <div className="w-full h-full bg-sky-900 absolute flex justify-center items-center">
                 <Debug />
             </div>
