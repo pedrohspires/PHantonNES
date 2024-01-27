@@ -4,7 +4,7 @@ import { isOverflow } from "../../utils/validations";
 import { addressResolve } from "../address";
 import { clearCarryFlag, clearNegativeFlag, clearOverflowFlag, setCarryFlag, setNegativeFlag, setOverflowFlag } from "../flags";
 
-export const execAddOpCode69 = (cpu: cpuType, addresMode: addressModes): void => {
+export const execAdc = (cpu: cpuType, addresMode: addressModes): void => {
     const arg = cpu.memory[cpu.pc + 1];
     exec(cpu, addresMode, arg);
     updateClock(cpu, addresMode);

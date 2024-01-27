@@ -7,21 +7,6 @@ type Return = [
     init: (rom: Uint8Array) => void
 ]
 
-
-
-
-
-
-
-// falta testar o ADC e implementar o Program Counter corretamente para avançar as instruções
-
-
-
-
-
-
-
-
 const useCpu = (): Return => {
     const [opCode, setOpCode] = useState<number>(0);
     const [cpu, setCpu] = useState<cpuType>({
@@ -46,10 +31,10 @@ const useCpu = (): Return => {
     const getInitialStateCpu = (cpu: cpuType) => {
         // For Tests
 
-        cpu.a = 0x02;
+        cpu.a = 0xff;
         cpu.pc = 0x01;
         cpu.memory[0x01] = 0x69;
-        cpu.memory[0x02] = 0xff;
+        cpu.memory[0x02] = 0x02;
     }
 
     const init = (rom: Uint8Array) => {
