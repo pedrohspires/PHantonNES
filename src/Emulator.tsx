@@ -1,9 +1,16 @@
+import { useEffect } from "react";
 import Debug from "./components/Debug";
 import { CpuContextProvider } from "./context/cpuContext";
 import useCpu from "./hooks/useCpu";
 
 function Emulador() {
     const [cpu, init] = useCpu();
+
+    useEffect(() => {
+        const andResult = Number('0b10111111');
+        const bitSeven = (andResult & 0x40) >> 6;
+        console.log(bitSeven);
+    }, []);
 
     const handleRomSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();

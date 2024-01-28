@@ -5,6 +5,7 @@ import { execAsl } from "./instructions/asl"
 import { execBcc } from "./instructions/bcc"
 import { execBcq } from "./instructions/bcq"
 import { execBcs } from "./instructions/bcs"
+import { execBit } from "./instructions/bit"
 
 export const instructions: InstructionType = {
     // ADC
@@ -42,4 +43,8 @@ export const instructions: InstructionType = {
 
     // BCQ
     0xf0: (cpu) => execBcq(cpu),
+
+    // BIT
+    0x24: (cpu) => execBit(cpu, "zero_page"),
+    0x2c: (cpu) => execBit(cpu, "absolute"),
 }
