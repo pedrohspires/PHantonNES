@@ -1,31 +1,21 @@
 import { addressModes } from "../../types/address.d";
 import { cpuType } from "../../types/cpu.d";
-import { isOverflow } from "../../utils/validations";
 import { addressResolve } from "../address";
-import { clearCarryFlag, clearNegativeFlag, clearOverflowFlag, setCarryFlag, setNegativeFlag, setOverflowFlag } from "../flags";
+import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../flags";
 
-export const execAdc = (cpu: cpuType, addresMode: addressModes): void => {
+export const execAnd = (cpu: cpuType, addresMode: addressModes): void => {
     const arg = cpu.memory[cpu.pc + 1];
     exec(cpu, addresMode, arg);
     updateClock(cpu, addresMode);
 }
 
 const exec = (cpu: cpuType, addresMode: addressModes, arg: number) => {
-    let content_to_add = addresMode == "immediate" ? arg : cpu.memory[addressResolve(cpu, arg, addresMode)];
-    let carry = Number(cpu.p[0]);
+    let content_to_and = addresMode == "immediate" ? arg : cpu.memory[addressResolve(cpu, arg, addresMode)];
 
-    if (isOverflow(cpu.a, content_to_add, carry)) setOverflowFlag(cpu);
-    else clearOverflowFlag(cpu);
+    cpu.a = cpu.a & content_to_and;
 
-    cpu.a += content_to_add + carry;
-
-    if (cpu.a > 0xff) {
-        setCarryFlag(cpu);
-        cpu.a -= 0x100;
-    } else clearCarryFlag(cpu);
-
-    if (cpu.a >> 7) setNegativeFlag(cpu);
-    else clearNegativeFlag(cpu);
+    cpu.a == 0 ? setZeroFlag(cpu) : clearZeroFlag(cpu);
+    cpu.a >> 7 ? setNegativeFlag(cpu) : clearNegativeFlag(cpu);
 }
 
 const updateClock = (cpu: cpuType, addresMode: addressModes) => {
