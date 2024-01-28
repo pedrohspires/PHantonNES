@@ -2,6 +2,9 @@ import { InstructionType } from "../types/instruction.d"
 import { execAdc } from "./instructions/adc"
 import { execAnd } from "./instructions/and"
 import { execAsl } from "./instructions/asl"
+import { execBcc } from "./instructions/bcc"
+import { execBcq } from "./instructions/bcq"
+import { execBcs } from "./instructions/bcs"
 
 export const instructions: InstructionType = {
     // ADC
@@ -30,4 +33,13 @@ export const instructions: InstructionType = {
     0x16: (cpu) => execAsl(cpu, "zero_page_x"),
     0x0e: (cpu) => execAsl(cpu, "absolute"),
     0x1e: (cpu) => execAsl(cpu, "absolute_x"),
+
+    // BCC
+    0x90: (cpu) => execBcc(cpu),
+
+    // BCS
+    0xb0: (cpu) => execBcs(cpu),
+
+    // BCQ
+    0xf0: (cpu) => execBcq(cpu),
 }
