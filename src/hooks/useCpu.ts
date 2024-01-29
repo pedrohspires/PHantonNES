@@ -31,28 +31,40 @@ const useCpu = (): Return => {
     const getInitialStateCpu = (cpu: cpuType) => {
         // For Tests
 
-        cpu.a = 0xff;
+        // opCode executado
+        cpu.memory[0x01] = 0x2d;
+
+        // posição do opCode
         cpu.pc = 0x01;
-        cpu.memory[0x01] = 0x69;
-        cpu.memory[0x02] = 0x02;
+
+        // argumentos do opCode
+        cpu.memory[0x02] = 0x01;
+        cpu.memory[0x03] = 0x02;
+        cpu.memory[0x0201] = Number('0b11101010');
+
+        // Estados iniciais
+        cpu.a = Number('0b01010101');
     }
 
     const init = (rom: Uint8Array) => {
-        if (rom[0] == 78 && rom[1] == 69 && rom[2] == 83) {
-            getInitialStateCpu(cpu);
+        // if (rom[0] == 78 && rom[1] == 69 && rom[2] == 83) {
+        //     getInitialStateCpu(cpu);
 
-            const part1 = cpu.memory.slice(0, 0x8000);
-            const part2 = cpu.memory.slice(0x8000, rom.length);
+        //     const part1 = cpu.memory.slice(0, 0x8000);
+        //     const part2 = cpu.memory.slice(0x8000, rom.length);
 
-            const memory = [...part1, ...rom, ...part2];
+        //     const memory = [...part1, ...rom, ...part2];
 
-            setCpu({
-                ...cpu,
-                memory
-            })
+        //     setCpu({
+        //         ...cpu,
+        //         memory
+        //     })
 
-            loop();
-        }
+        //     loop();
+        // }
+
+        getInitialStateCpu(cpu)
+        loop()
     }
 
     const loop = () => {

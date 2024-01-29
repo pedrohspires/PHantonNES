@@ -1,57 +1,89 @@
 import { addressModes } from "../types/address.d";
 import { cpuType } from "../types/cpu.d";
+import { formatNumber } from "../utils/format";
 
-export const addressResolve = (cpu: cpuType, arg: number, mode: addressModes, ignorePageCrossed?: boolean): number => {
+const getCombinedAddress = (lowByte: number, highByte: number) => {
+    return Number("0x" + formatNumber(highByte, 2) + formatNumber(lowByte, 2))
+};
+
+export const addressResolve = (cpu: cpuType, mode: addressModes, ignorePageCrossed?: boolean): number => {
     switch (mode) {
-        case "zero_page": return arg;
-        case "zero_page_x": return cpu.memory[arg] + cpu.x;
-        case "zero_page_y": return cpu.memory[arg] + cpu.y;
-        case "absolute": return arg;
+        case "zero_page": return cpu.memory[cpu.pc + 1];
+
+        case "zero_page_x": {
+            const arg = cpu.memory[cpu.pc + 1];
+            const result = arg + cpu.x;
+
+            return result > 0xff ? result - 0x100 : result;
+        }
+
+        case "zero_page_y": {
+            const arg = cpu.pc + 1;
+            const result = arg + cpu.y;
+            return result > 0xff ? result - 0x100 : result;
+        }
+
+        case "absolute": {
+            const arg1 = cpu.memory[cpu.pc + 1];
+            const arg2 = cpu.memory[cpu.pc + 2];
+
+            return getCombinedAddress(arg1, arg2);
+        }
 
         case "absolute_x": {
-            let memory_value = cpu.memory[arg];
-            let address = memory_value + cpu.x;
+            const arg1 = cpu.memory[cpu.pc + 1];
+            const arg2 = cpu.memory[cpu.pc + 2];
 
-            if (address.toString(16).slice(0, 2) != memory_value.toString(16) && !ignorePageCrossed)
+            let addressAbsolute = getCombinedAddress(arg1, arg2);
+
+            let address = addressAbsolute + cpu.x;
+
+            if (address.toString(16).slice(0, 2) != addressAbsolute.toString(16).slice(0, 2) && !ignorePageCrossed)
                 cpu.clock++;
 
             return address;
-        };
+        }
 
         case "absolute_y": {
-            let memory_value = cpu.memory[arg];
-            let address = memory_value + cpu.y;
+            const arg1 = cpu.memory[cpu.pc + 1];
+            const arg2 = cpu.memory[cpu.pc + 2];
 
-            if (address.toString(16).slice(0, 2) != memory_value.toString(16) && !ignorePageCrossed)
+            let addressAbsolute = getCombinedAddress(arg1, arg2);
+
+            let address = addressAbsolute + cpu.y;
+
+            if (address.toString(16).slice(0, 2) != addressAbsolute.toString(16).slice(0, 2) && !ignorePageCrossed)
                 cpu.clock++;
 
             return address;
-        };
+        }
 
         case "indirect": {
-            let byte_least_significant = cpu.memory[arg];
-            let byte_most_significant = cpu.memory[arg + 1];
-            return Number("0x" + byte_most_significant.toString(16) + byte_least_significant.toString(16));
-        };
+            const arg1 = cpu.memory[cpu.pc + 1];
+            const arg2 = cpu.memory[cpu.pc + 2];
+
+            let addressResolved = getCombinedAddress(arg1, arg2);
+            const lowByte = cpu.memory[addressResolved];
+            const highByte = cpu.memory[addressResolved + 1];
+
+            return getCombinedAddress(lowByte, highByte);
+        }
 
         case "indirect_x": {
-            let zero_page_x_address = cpu.memory[arg] + cpu.x;
-            let byte_least_significant = cpu.memory[zero_page_x_address];
-            let byte_most_significant = cpu.memory[zero_page_x_address + 1];
-            return Number("0x" + byte_most_significant.toString(16) + byte_least_significant.toString(16));
-        };
+            const addressIndirect = cpu.memory[cpu.pc + 1] + cpu.x;
+            const arg1 = cpu.memory[addressIndirect];
+            const arg2 = cpu.memory[addressIndirect + 1];
+
+            return getCombinedAddress(arg1, arg2);
+        }
 
         case "indirect_y": {
-            let zero_page_y_address = cpu.memory[arg] + cpu.y;
-            let byte_least_significant = cpu.memory[zero_page_y_address];
-            let byte_most_significant = cpu.memory[zero_page_y_address + 1];
-            let addressResolved = Number("0x" + byte_most_significant.toString(16) + byte_least_significant.toString(16));
+            const addressIndirect = cpu.memory[cpu.pc + 1] + cpu.y;
+            const arg1 = cpu.memory[addressIndirect];
+            const arg2 = cpu.memory[addressIndirect + 1];
 
-            if (addressResolved.toString(16).slice(0, 2) != cpu.memory[addressResolved].toString(16) && !ignorePageCrossed)
-                cpu.clock++;
-
-            return addressResolved;
-        };
+            return getCombinedAddress(arg1, arg2);
+        }
     }
 
     return 0;

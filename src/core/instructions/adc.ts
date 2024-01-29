@@ -5,13 +5,12 @@ import { addressResolve } from "../address";
 import { clearCarryFlag, clearNegativeFlag, clearOverflowFlag, clearZeroFlag, setCarryFlag, setNegativeFlag, setOverflowFlag, setZeroFlag } from "../flags";
 
 export const execAdc = (cpu: cpuType, addressMode: addressModes): void => {
-    const arg = cpu.memory[cpu.pc + 1];
-    exec(cpu, addressMode, arg);
+    exec(cpu, addressMode);
     updateClock(cpu, addressMode);
 }
 
-const exec = (cpu: cpuType, addressMode: addressModes, arg: number) => {
-    let content_to_add = addressMode == "immediate" ? arg : cpu.memory[addressResolve(cpu, arg, addressMode)];
+const exec = (cpu: cpuType, addressMode: addressModes) => {
+    let content_to_add = addressMode == "immediate" ? cpu.memory[cpu.pc + 1] : cpu.memory[addressResolve(cpu, addressMode)];
     let carry = Number(cpu.p[0]);
 
     isOverflow(cpu.a, content_to_add, carry) ? setOverflowFlag(cpu) : clearOverflowFlag(cpu);

@@ -5,13 +5,12 @@ import { clearCarryFlag, clearNegativeFlag, clearZeroFlag, setCarryFlag, setNega
 import { updateMemoryMap } from "../memory";
 
 export const execAsl = (cpu: cpuType, addressMode: addressModes): void => {
-    const arg = cpu.memory[cpu.pc + 1];
-    exec(cpu, addressMode, arg);
+    exec(cpu, addressMode);
     updateClock(cpu, addressMode);
 }
 
-const exec = (cpu: cpuType, addressMode: addressModes, arg: number) => {
-    const address = addressResolve(cpu, arg, addressMode, true)
+const exec = (cpu: cpuType, addressMode: addressModes) => {
+    const address = addressResolve(cpu, addressMode, true)
     let content = addressMode == "accumulator" ? cpu.a : cpu.memory[address];
 
     content >> 7 ? setCarryFlag(cpu) : clearCarryFlag(cpu);

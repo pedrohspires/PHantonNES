@@ -4,13 +4,12 @@ import { addressResolve } from "../address";
 import { clearOverflowFlag, setOverflowFlag } from "../flags";
 
 export const execBit = (cpu: cpuType, addressMode: addressModes): void => {
-    const arg = cpu.memory[cpu.pc + 1];
-    exec(cpu, addressMode, arg);
+    exec(cpu, addressMode);
     updateClock(cpu, addressMode);
 }
 
-const exec = (cpu: cpuType, addressMode: addressModes, arg: number) => {
-    const contentMemory = cpu.memory[addressResolve(cpu, arg, addressMode)]
+const exec = (cpu: cpuType, addressMode: addressModes) => {
+    const contentMemory = cpu.memory[addressResolve(cpu, addressMode)]
 
     const andResult = contentMemory & cpu.a;
 

@@ -4,15 +4,19 @@ import { addressResolve } from "../address";
 import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../flags";
 
 export const execAnd = (cpu: cpuType, addressMode: addressModes): void => {
-    const arg = cpu.memory[cpu.pc + 1];
-    exec(cpu, addressMode, arg);
+    console.log("inicio exec")
+    exec(cpu, addressMode);
+    console.log("fim exec")
     updateClock(cpu, addressMode);
 }
 
-const exec = (cpu: cpuType, addressMode: addressModes, arg: number) => {
-    let content_to_and = addressMode == "immediate" ? arg : cpu.memory[addressResolve(cpu, arg, addressMode)];
+const exec = (cpu: cpuType, addressMode: addressModes) => {
+    let content_to_and = addressMode == "immediate" ? cpu.memory[cpu.pc + 1] : cpu.memory[addressResolve(cpu, addressMode)];
 
+    console.log(content_to_and.toString(2))
+    console.log(cpu.a.toString(2))
     cpu.a = cpu.a & content_to_and;
+    console.log(cpu.a.toString(2))
 
     cpu.a == 0 ? setZeroFlag(cpu) : clearZeroFlag(cpu);
     cpu.a >> 7 ? setNegativeFlag(cpu) : clearNegativeFlag(cpu);

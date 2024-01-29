@@ -1,16 +1,9 @@
-import { useEffect } from "react";
 import Debug from "./components/Debug";
 import { CpuContextProvider } from "./context/cpuContext";
 import useCpu from "./hooks/useCpu";
 
 function Emulador() {
     const [cpu, init] = useCpu();
-
-    useEffect(() => {
-        const andResult = Number('0b10111111');
-        const bitSeven = (andResult & 0x40) >> 6;
-        console.log(bitSeven);
-    }, []);
 
     const handleRomSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
@@ -30,7 +23,10 @@ function Emulador() {
 
     return (
         <CpuContextProvider value={cpu}>
-            <input type="file" onChange={handleRomSelect} accept=".nes" />
+            <div className="flex justify-between">
+                <input type="file" onChange={handleRomSelect} accept=".nes" />
+                <button onClick={() => init(new Uint8Array())}>Executr</button>
+            </div>
 
             <div className="w-full h-full bg-sky-900 absolute flex justify-center items-center">
                 <Debug />
