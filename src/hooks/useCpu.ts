@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { instructions } from "../core/instructions";
 import { cpuType } from "../types/cpu.d";
 
@@ -8,7 +8,6 @@ type Return = [
 ]
 
 const useCpu = (): Return => {
-    const [opCode, setOpCode] = useState<number>(0);
     const [cpu, setCpu] = useState<cpuType>({
         memory: new Array(0xffff).fill(0),
         a: 0,
@@ -20,30 +19,8 @@ const useCpu = (): Return => {
         p: "00000000" //CZIDB-VN
     });
 
-    useEffect(() => {
-        if (opCode) {
-            const opCodeFunction = instructions[opCode];
-            opCodeFunction(cpu);
-            setCpu({ ...cpu });
-        }
-    }, [opCode]);
-
     const getInitialStateCpu = (cpu: cpuType) => {
-        // For Tests
 
-        // opCode executado
-        cpu.memory[0x01] = 0x2d;
-
-        // posição do opCode
-        cpu.pc = 0x01;
-
-        // argumentos do opCode
-        cpu.memory[0x02] = 0x01;
-        cpu.memory[0x03] = 0x02;
-        cpu.memory[0x0201] = Number('0b11101010');
-
-        // Estados iniciais
-        cpu.a = Number('0b01010101');
     }
 
     const init = (rom: Uint8Array) => {
@@ -64,11 +41,22 @@ const useCpu = (): Return => {
         // }
 
         getInitialStateCpu(cpu)
-        loop()
+        loop();
     }
 
     const loop = () => {
-        setOpCode(cpu.memory[cpu.pc]);
+        while (cpu.pc <= 0x12)
+            execOpCode(cpu.memory[cpu.pc]);
+    }
+
+    const execOpCode = (opCode: number) => {
+        const opCodeFunction = instructions[opCode];
+        cpu.a = 0x10;
+        cpu.x = 0x05;
+        cpu.y = 0x06;
+
+        opCodeFunction(cpu);
+        setCpu({ ...cpu });
     }
 
     return [cpu, init];
