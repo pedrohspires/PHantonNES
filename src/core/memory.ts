@@ -8,7 +8,6 @@ export const updateMemoryMap = (cpu: cpuType, addr: number) => {
         }
         return;
     }
-
     if (addr >= 0x2000 && addr <= 0x2007) {
         while (addr < 0x4000) {
             cpu.memory[addr + 0x8] = cpu?.memory[addr];

@@ -14,18 +14,17 @@ const exec = (cpu: cpuType, addressMode: addressModes) => {
     let content = addressMode == "accumulator" ? cpu.a : cpu.memory[address];
 
     content >> 7 ? setCarryFlag(cpu) : clearCarryFlag(cpu);
-
     const newContent = content << 1;
 
     if (addressMode == "accumulator") {
         cpu.a = newContent;
     } else {
-        cpu.memory[address] = content;
+        cpu.memory[address] = newContent;
         updateMemoryMap(cpu, address);
     }
 
     cpu.a == 0 ? setZeroFlag(cpu) : clearZeroFlag(cpu);
-    content >> 7 ? setNegativeFlag(cpu) : clearNegativeFlag(cpu);
+    newContent >> 7 ? setNegativeFlag(cpu) : clearNegativeFlag(cpu);
 }
 
 const updateClock = (cpu: cpuType, addressMode: addressModes) => {
