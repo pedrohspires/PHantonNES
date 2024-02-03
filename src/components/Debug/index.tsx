@@ -18,6 +18,7 @@ export default function Debug() {
             <div className="w-full flex justify-evenly">
                 <Register value={cpu !== null ? cpu?.pc : null} label="PC" is16Bits />
                 <Register value={cpu !== null ? cpu?.sp : null} label="SP" is16Bits />
+                <Register value={cpu !== null ? cpu?.clock : null} label="Clock" is16Bits />
             </div>
 
             <Flags />

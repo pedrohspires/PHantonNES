@@ -1,18 +1,18 @@
 import { cpuType } from "../../types/cpu.d";
+import { formatNumber } from "../../utils/format";
 
 export const execBcc = (cpu: cpuType): void => {
-    const arg = cpu.memory[cpu.pc + 1];
-    exec(cpu, arg);
+    exec(cpu);
     cpu.pc += 2;
 }
 
-const exec = (cpu: cpuType, arg: number) => {
+const exec = (cpu: cpuType) => {
     let carry = Number(cpu.p[0]);
 
     if (!carry) {
         let oldPc = cpu.pc;
 
-        cpu.pc += arg - 128;
-        cpu.clock += (oldPc.toString(16).substring(0, 2) != cpu.pc.toString(16).substring(0, 2) ? 5 : 3); // 2 + 1 pelo sucesso + 2 se foi para nova página
+        cpu.pc += cpu.memory[cpu.pc + 1];
+        cpu.clock += (formatNumber(oldPc).substring(0, 2) != formatNumber(cpu.pc).substring(0, 2) ? 5 : 3); // 2 + 1 pelo sucesso + 2 se foi para nova página
     }
 }

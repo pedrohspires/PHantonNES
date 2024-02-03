@@ -1,15 +1,15 @@
 import { cpuType } from "../../types/cpu.d";
 import { formatNumber } from "../../utils/format";
 
-export const execBcs = (cpu: cpuType): void => {
+export const execbeq = (cpu: cpuType): void => {
     exec(cpu);
     cpu.pc += 2;
 }
 
 const exec = (cpu: cpuType) => {
-    let carry = Number(cpu.p[0]);
+    let zero = Number(cpu.p[1]);
 
-    if (carry) {
+    if (zero) {
         let oldPc = cpu.pc;
 
         cpu.pc += cpu.memory[cpu.pc + 1];

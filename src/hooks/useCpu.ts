@@ -22,7 +22,11 @@ const useCpu = (): Return => {
     const getInitialStateCpu = (cpu: cpuType) => {
         cpu.pc = 0x01;
 
-        cpu.memory[0x01] = 0x0a;
+        cpu.memory[0x01] = 0x2c;
+        cpu.memory[0x02] = 0x04;
+        cpu.memory[0x03] = 0x01;
+        cpu.memory[0x0104] = Number("0b11000000");
+        cpu.a = Number("0b11111111");
     }
 
     const init = (rom: Uint8Array) => {
@@ -53,9 +57,6 @@ const useCpu = (): Return => {
 
     const execOpCode = (opCode: number) => {
         const opCodeFunction = instructions[opCode];
-        cpu.a = Number('0b01010101');
-        cpu.x = 0x05
-        cpu.y = 0x06
 
         opCodeFunction(cpu);
         setCpu({ ...cpu });

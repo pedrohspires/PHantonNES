@@ -3,8 +3,8 @@ import { execAdc } from "./instructions/adc"
 import { execAnd } from "./instructions/and"
 import { execAsl } from "./instructions/asl"
 import { execBcc } from "./instructions/bcc"
-import { execBcq } from "./instructions/bcq"
 import { execBcs } from "./instructions/bcs"
+import { execbeq } from "./instructions/beq"
 import { execBit } from "./instructions/bit"
 
 export const instructions: InstructionType = {
@@ -41,8 +41,8 @@ export const instructions: InstructionType = {
     // BCS
     0xb0: (cpu) => execBcs(cpu),
 
-    // BCQ
-    0xf0: (cpu) => execBcq(cpu),
+    // beq
+    0xf0: (cpu) => execbeq(cpu),
 
     // BIT
     0x24: (cpu) => execBit(cpu, "zero_page"),
