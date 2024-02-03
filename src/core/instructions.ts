@@ -8,6 +8,7 @@ import { execBeq } from "./instructions/beq"
 import { execBit } from "./instructions/bit"
 import { execBmi } from "./instructions/bmi"
 import { execBne } from "./instructions/bne"
+import { execBrk } from "./instructions/brk"
 
 export const instructions: InstructionType = {
     // ADC
@@ -58,4 +59,7 @@ export const instructions: InstructionType = {
 
     // BPL
     0x10: (cpu) => execBne(cpu),
+
+    // BRK
+    0x00: (cpu) => execBrk(cpu),
 }
