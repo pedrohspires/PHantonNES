@@ -3,7 +3,7 @@ import cpuContext from "../../context/cpuContext";
 
 export default function Flags() {
     const cpu = useContext(cpuContext);
-    const flags = "CZIDB-VN";
+    const flags = "NV-BDIZC";
 
     const renderFlag = (value: string, label: string): JSX.Element => {
         return (

@@ -1,15 +1,15 @@
 import { cpuType } from "../../types/cpu.d";
 import { formatNumber } from "../../utils/format";
 
-export const execBeq = (cpu: cpuType): void => {
+export const execBpl = (cpu: cpuType): void => {
     exec(cpu);
     cpu.pc += 2;
 }
 
 const exec = (cpu: cpuType) => {
-    let zero = Number(cpu.p[1]);
+    let negative = Number(cpu.p[7]);
 
-    if (zero) {
+    if (!negative) {
         let oldPc = cpu.pc;
 
         cpu.pc += cpu.memory[cpu.pc + 1];

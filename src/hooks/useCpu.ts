@@ -16,17 +16,16 @@ const useCpu = (): Return => {
         pc: 0xc000,
         sp: 0x01ff,
         clock: 0,
-        p: "00000000" //CZIDB-VN
+        p: "00000000" // CZIDB-VN -> indices -> 01234567
     });
 
     const getInitialStateCpu = (cpu: cpuType) => {
         cpu.pc = 0x01;
 
-        cpu.memory[0x01] = 0x2c;
-        cpu.memory[0x02] = 0x04;
-        cpu.memory[0x03] = 0x01;
-        cpu.memory[0x0104] = Number("0b11000000");
-        cpu.a = Number("0b11111111");
+        cpu.p = "00000001"
+
+        cpu.memory[0x01] = 0x30;
+        cpu.memory[0x02] = 0xff;
     }
 
     const init = (rom: Uint8Array) => {

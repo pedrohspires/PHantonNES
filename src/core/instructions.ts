@@ -4,8 +4,10 @@ import { execAnd } from "./instructions/and"
 import { execAsl } from "./instructions/asl"
 import { execBcc } from "./instructions/bcc"
 import { execBcs } from "./instructions/bcs"
-import { execbeq } from "./instructions/beq"
+import { execBeq } from "./instructions/beq"
 import { execBit } from "./instructions/bit"
+import { execBmi } from "./instructions/bmi"
+import { execBne } from "./instructions/bne"
 
 export const instructions: InstructionType = {
     // ADC
@@ -41,10 +43,19 @@ export const instructions: InstructionType = {
     // BCS
     0xb0: (cpu) => execBcs(cpu),
 
-    // beq
-    0xf0: (cpu) => execbeq(cpu),
+    // BEQ
+    0xf0: (cpu) => execBeq(cpu),
 
     // BIT
     0x24: (cpu) => execBit(cpu, "zero_page"),
     0x2c: (cpu) => execBit(cpu, "absolute"),
+
+    // BMI
+    0x30: (cpu) => execBmi(cpu),
+
+    // BNE
+    0xd0: (cpu) => execBne(cpu),
+
+    // BPL
+    0x10: (cpu) => execBne(cpu),
 }
