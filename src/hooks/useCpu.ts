@@ -56,8 +56,6 @@ const useCpu = (): Return => {
     const execOpCode = (opCode: number) => {
         const opCodeFunction = instructions[opCode];
 
-        cpu.a = Number('0b11111111')
-
         opCodeFunction(cpu);
         setCpu({ ...cpu });
     }
