@@ -15,6 +15,7 @@ import { execClc } from "./instructions/clc"
 import { execCld } from "./instructions/cld"
 import { execCli } from "./instructions/cli"
 import { execClv } from "./instructions/clv"
+import { execCmp } from "./instructions/cmp"
 
 export const instructions: InstructionType = {
     // ADC
@@ -86,4 +87,14 @@ export const instructions: InstructionType = {
 
     // CLV
     0xb8: (cpu) => execClv(cpu),
+
+    // CMP
+    0xc9: (cpu) => execCmp(cpu, "immediate"),
+    0xc5: (cpu) => execCmp(cpu, "zero_page"),
+    0xd5: (cpu) => execCmp(cpu, "zero_page_x"),
+    0xcd: (cpu) => execCmp(cpu, "absolute"),
+    0xdd: (cpu) => execCmp(cpu, "absolute_x"),
+    0xd9: (cpu) => execCmp(cpu, "absolute_y"),
+    0xc1: (cpu) => execCmp(cpu, "indirect_x"),
+    0xd1: (cpu) => execCmp(cpu, "indirect_y"),
 }

@@ -20,36 +20,34 @@ const useCpu = (): Return => {
     });
 
     const getInitialStateCpu = (cpu: cpuType) => {
-        cpu.pc = 0x1a;
+        cpu.pc = 0x01;
 
-        cpu.p = "01010101";
-
-        cpu.memory[0x1a] = 0x00;
-
-        cpu.memory[0xfffe] = 0x01;
-        cpu.memory[0xffff] = 0x02;
+        cpu.memory[0x01] = 0xc9;
+        cpu.memory[0x02] = Number('0b11111111');
     }
 
-    const init = (rom: Uint8Array) => {
-        // if (rom[0] == 78 && rom[1] == 69 && rom[2] == 83) {
-        //     getInitialStateCpu(cpu);
-
-        //     const part1 = cpu.memory.slice(0, 0x8000);
-        //     const part2 = cpu.memory.slice(0x8000, rom.length);
-
-        //     const memory = [...part1, ...rom, ...part2];
-
-        //     setCpu({
-        //         ...cpu,
-        //         memory
-        //     })
-
-        //     loop();
-        // }
-
+    const init = () => {
         getInitialStateCpu(cpu)
         loop();
     }
+
+    // const init = (rom: Uint8Array) => {
+    //     if (rom[0] == 78 && rom[1] == 69 && rom[2] == 83) {
+    //         getInitialStateCpu(cpu);
+
+    //         const part1 = cpu.memory.slice(0, 0x8000);
+    //         const part2 = cpu.memory.slice(0x8000, rom.length);
+
+    //         const memory = [...part1, ...rom, ...part2];
+
+    //         setCpu({
+    //             ...cpu,
+    //             memory
+    //         })
+
+    //         loop();
+    //     }
+    // }
 
     const loop = () => {
         execOpCode(cpu.memory[cpu.pc]);
@@ -57,6 +55,8 @@ const useCpu = (): Return => {
 
     const execOpCode = (opCode: number) => {
         const opCodeFunction = instructions[opCode];
+
+        cpu.a = Number('0b11111111')
 
         opCodeFunction(cpu);
         setCpu({ ...cpu });
