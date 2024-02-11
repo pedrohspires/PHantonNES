@@ -21,6 +21,7 @@ import { execCpy } from "./instructions/cpy"
 import { execDec } from "./instructions/dec"
 import { execDex } from "./instructions/dex"
 import { execDey } from "./instructions/dey"
+import { execEor } from "./instructions/eor"
 
 export const instructions: InstructionType = {
     // ADC
@@ -124,4 +125,14 @@ export const instructions: InstructionType = {
 
     // DEY
     0x88: (cpu) => execDey(cpu),
+
+    // EOR
+    0x49: (cpu) => execEor(cpu, "immediate"),
+    0x45: (cpu) => execEor(cpu, "zero_page"),
+    0x55: (cpu) => execEor(cpu, "zero_page_x"),
+    0x4d: (cpu) => execEor(cpu, "absolute"),
+    0x5d: (cpu) => execEor(cpu, "absolute_x"),
+    0x59: (cpu) => execEor(cpu, "absolute_y"),
+    0x41: (cpu) => execEor(cpu, "indirect_x"),
+    0x51: (cpu) => execEor(cpu, "indirect_y"),
 }
