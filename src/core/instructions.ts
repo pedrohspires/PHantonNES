@@ -9,6 +9,12 @@ import { execBit } from "./instructions/bit"
 import { execBmi } from "./instructions/bmi"
 import { execBne } from "./instructions/bne"
 import { execBrk } from "./instructions/brk"
+import { execBvc } from "./instructions/bvc"
+import { execBvs } from "./instructions/bvs"
+import { execClc } from "./instructions/clc"
+import { execCld } from "./instructions/cld"
+import { execCli } from "./instructions/cli"
+import { execClv } from "./instructions/clv"
 
 export const instructions: InstructionType = {
     // ADC
@@ -62,4 +68,22 @@ export const instructions: InstructionType = {
 
     // BRK
     0x00: (cpu) => execBrk(cpu),
+
+    // BVC
+    0x50: (cpu) => execBvc(cpu),
+
+    // BVS
+    0x70: (cpu) => execBvs(cpu),
+
+    // CLC
+    0x18: (cpu) => execClc(cpu),
+
+    // CLD
+    0xd8: (cpu) => execCld(cpu),
+
+    // CLI
+    0x58: (cpu) => execCli(cpu),
+
+    // CLV
+    0xb8: (cpu) => execClv(cpu),
 }
