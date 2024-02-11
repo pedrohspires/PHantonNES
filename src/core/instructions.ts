@@ -150,4 +150,8 @@ export const instructions: InstructionType = {
 
     // INY
     0xc8: (cpu) => execIny(cpu),
+
+    // JMP
+    0x4c: (cpu) => execInc(cpu, "absolute"),
+    0x6c: (cpu) => execInc(cpu, "indirect"),
 }
