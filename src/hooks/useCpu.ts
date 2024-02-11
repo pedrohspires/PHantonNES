@@ -22,8 +22,9 @@ const useCpu = (): Return => {
     const getInitialStateCpu = (cpu: cpuType) => {
         cpu.pc = 0x01;
 
-        cpu.memory[0x01] = 0xc9;
-        cpu.memory[0x02] = Number('0b11111111');
+        cpu.memory[0x01] = 0xc6;
+        cpu.memory[0x02] = 0x03;
+        cpu.memory[0x03] = 0xff;
     }
 
     const init = () => {

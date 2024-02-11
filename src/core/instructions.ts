@@ -18,6 +18,9 @@ import { execClv } from "./instructions/clv"
 import { execCmp } from "./instructions/cmp"
 import { execCpx } from "./instructions/cpx"
 import { execCpy } from "./instructions/cpy"
+import { execDec } from "./instructions/dec"
+import { execDex } from "./instructions/dex"
+import { execDey } from "./instructions/dey"
 
 export const instructions: InstructionType = {
     // ADC
@@ -109,4 +112,16 @@ export const instructions: InstructionType = {
     0xc0: (cpu) => execCpy(cpu, "immediate"),
     0xc4: (cpu) => execCpy(cpu, "zero_page"),
     0xcc: (cpu) => execCpy(cpu, "absolute"),
+
+    // dec
+    0xc6: (cpu) => execDec(cpu, "zero_page"),
+    0xd6: (cpu) => execDec(cpu, "zero_page_x"),
+    0xce: (cpu) => execDec(cpu, "absolute"),
+    0xde: (cpu) => execDec(cpu, "absolute_x"),
+
+    // DEX
+    0xca: (cpu) => execDex(cpu),
+
+    // DEY
+    0x88: (cpu) => execDey(cpu),
 }
