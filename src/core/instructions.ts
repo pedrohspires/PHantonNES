@@ -27,6 +27,7 @@ import { execInx } from "./instructions/inx"
 import { execIny } from "./instructions/iny"
 import { execJmp } from "./instructions/jmp"
 import { execJsr } from "./instructions/jsr"
+import { execLda } from "./instructions/lda"
 
 export const instructions: InstructionType = {
     // ADC
@@ -159,4 +160,14 @@ export const instructions: InstructionType = {
 
     // JSR
     0x20: (cpu) => execJsr(cpu),
+
+    // LDA
+    0xa9: (cpu) => execLda(cpu, "immediate"),
+    0xa5: (cpu) => execLda(cpu, "zero_page"),
+    0xb5: (cpu) => execLda(cpu, "zero_page_x"),
+    0xad: (cpu) => execLda(cpu, "absolute"),
+    0xbd: (cpu) => execLda(cpu, "absolute_x"),
+    0xb9: (cpu) => execLda(cpu, "absolute_y"),
+    0xa1: (cpu) => execLda(cpu, "indirect_x"),
+    0xb1: (cpu) => execLda(cpu, "indirect_y"),
 }
