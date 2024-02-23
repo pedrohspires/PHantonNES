@@ -25,6 +25,8 @@ import { execEor } from "./instructions/eor"
 import { execInc } from "./instructions/inc"
 import { execInx } from "./instructions/inx"
 import { execIny } from "./instructions/iny"
+import { execJmp } from "./instructions/jmp"
+import { execJsr } from "./instructions/jsr"
 
 export const instructions: InstructionType = {
     // ADC
@@ -152,6 +154,9 @@ export const instructions: InstructionType = {
     0xc8: (cpu) => execIny(cpu),
 
     // JMP
-    0x4c: (cpu) => execInc(cpu, "absolute"),
-    0x6c: (cpu) => execInc(cpu, "indirect"),
+    0x4c: (cpu) => execJmp(cpu, "absolute"),
+    0x6c: (cpu) => execJmp(cpu, "indirect"),
+
+    // JSR
+    0x20: (cpu) => execJsr(cpu),
 }
