@@ -36,6 +36,8 @@ import { execOra } from "./instructions/ora"
 import { execPha } from "./instructions/pha"
 import { execPhp } from "./instructions/php"
 import { execPla } from "./instructions/pla"
+import { execRol } from "./instructions/rol"
+import { execRor } from "./instructions/ror"
 
 export const instructions: InstructionType = {
     // ADC
@@ -128,7 +130,7 @@ export const instructions: InstructionType = {
     0xc4: (cpu) => execCpy(cpu, "zero_page"),
     0xcc: (cpu) => execCpy(cpu, "absolute"),
 
-    // dec
+    // DEC
     0xc6: (cpu) => execDec(cpu, "zero_page"),
     0xd6: (cpu) => execDec(cpu, "zero_page_x"),
     0xce: (cpu) => execDec(cpu, "absolute"),
@@ -221,4 +223,18 @@ export const instructions: InstructionType = {
 
     // PLA
     0x68: (cpu) => execPla(cpu),
+
+    // ROL
+    0x2a: (cpu) => execRol(cpu, "accumulator"),
+    0x26: (cpu) => execRol(cpu, "zero_page"),
+    0x36: (cpu) => execRol(cpu, "zero_page_x"),
+    0x2e: (cpu) => execRol(cpu, "absolute"),
+    0x3e: (cpu) => execRol(cpu, "absolute_x"),
+
+    // ROR
+    0x6a: (cpu) => execRor(cpu, "accumulator"),
+    0x66: (cpu) => execRor(cpu, "zero_page"),
+    0x76: (cpu) => execRor(cpu, "zero_page_x"),
+    0x6e: (cpu) => execRor(cpu, "absolute"),
+    0x7e: (cpu) => execRor(cpu, "absolute_x"),
 }

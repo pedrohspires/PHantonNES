@@ -1,4 +1,5 @@
 import { cpuType } from "../../types/cpu.d";
+import { formatNumber } from "../../utils/format";
 
 export const execPlp = (cpu: cpuType): void => {
     exec(cpu);
@@ -7,5 +8,5 @@ export const execPlp = (cpu: cpuType): void => {
 }
 
 const exec = (cpu: cpuType) => {
-    cpu.p = cpu.memory[cpu.sp++].toString(2);
+    cpu.p = formatNumber(cpu.memory[cpu.sp++], 8, 2);
 }
