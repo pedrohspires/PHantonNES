@@ -31,6 +31,8 @@ import { execLda } from "./instructions/lda"
 import { execLdx } from "./instructions/ldx"
 import { execLdy } from "./instructions/ldy"
 import { execLsr } from "./instructions/lsr"
+import { execNop } from "./instructions/nop"
+import { execOra } from "./instructions/ora"
 
 export const instructions: InstructionType = {
     // ADC
@@ -194,4 +196,17 @@ export const instructions: InstructionType = {
     0x56: (cpu) => execLsr(cpu, "zero_page_x"),
     0x4e: (cpu) => execLsr(cpu, "absolute"),
     0x5e: (cpu) => execLsr(cpu, "absolute_x"),
+
+    // NOP
+    0xea: (cpu) => execNop(cpu),
+
+    // ORA
+    0x09: (cpu) => execOra(cpu, "immediate"),
+    0x05: (cpu) => execOra(cpu, "zero_page"),
+    0x15: (cpu) => execOra(cpu, "zero_page_x"),
+    0x0d: (cpu) => execOra(cpu, "absolute"),
+    0x1d: (cpu) => execOra(cpu, "absolute_x"),
+    0x19: (cpu) => execOra(cpu, "absolute_y"),
+    0x01: (cpu) => execOra(cpu, "indirect_x"),
+    0x11: (cpu) => execOra(cpu, "indirect_y"),
 }
