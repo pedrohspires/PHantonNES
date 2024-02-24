@@ -35,6 +35,7 @@ import { execNop } from "./instructions/nop"
 import { execOra } from "./instructions/ora"
 import { execPha } from "./instructions/pha"
 import { execPhp } from "./instructions/php"
+import { execPla } from "./instructions/pla"
 
 export const instructions: InstructionType = {
     // ADC
@@ -217,4 +218,7 @@ export const instructions: InstructionType = {
 
     // PHP
     0x08: (cpu) => execPhp(cpu),
+
+    // PLA
+    0x68: (cpu) => execPla(cpu),
 }
