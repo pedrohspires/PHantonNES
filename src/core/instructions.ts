@@ -45,6 +45,7 @@ import { execSec } from "./instructions/sec"
 import { execSed } from "./instructions/sed"
 import { execSei } from "./instructions/sei"
 import { execSta } from "./instructions/sta"
+import { execStx } from "./instructions/stx"
 
 export const instructions: InstructionType = {
     // ADC
@@ -278,4 +279,14 @@ export const instructions: InstructionType = {
     0x99: (cpu) => execSta(cpu, "absolute_y"),
     0x81: (cpu) => execSta(cpu, "indirect_x"),
     0x91: (cpu) => execSta(cpu, "indirect_y"),
+
+    // STX
+    0x86: (cpu) => execStx(cpu, "zero_page"),
+    0x96: (cpu) => execStx(cpu, "zero_page_y"),
+    0x8e: (cpu) => execStx(cpu, "absolute"),
+
+    // STY
+    0x84: (cpu) => execStx(cpu, "zero_page"),
+    0x94: (cpu) => execStx(cpu, "zero_page_x"),
+    0x8c: (cpu) => execStx(cpu, "absolute"),
 }
