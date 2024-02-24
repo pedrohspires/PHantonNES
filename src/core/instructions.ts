@@ -33,6 +33,8 @@ import { execLdy } from "./instructions/ldy"
 import { execLsr } from "./instructions/lsr"
 import { execNop } from "./instructions/nop"
 import { execOra } from "./instructions/ora"
+import { execPha } from "./instructions/pha"
+import { execPhp } from "./instructions/php"
 
 export const instructions: InstructionType = {
     // ADC
@@ -209,4 +211,10 @@ export const instructions: InstructionType = {
     0x19: (cpu) => execOra(cpu, "absolute_y"),
     0x01: (cpu) => execOra(cpu, "indirect_x"),
     0x11: (cpu) => execOra(cpu, "indirect_y"),
+
+    // PHA
+    0x48: (cpu) => execPha(cpu),
+
+    // PHP
+    0x08: (cpu) => execPhp(cpu),
 }
