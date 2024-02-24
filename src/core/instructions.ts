@@ -30,6 +30,7 @@ import { execJsr } from "./instructions/jsr"
 import { execLda } from "./instructions/lda"
 import { execLdx } from "./instructions/ldx"
 import { execLdy } from "./instructions/ldy"
+import { execLsr } from "./instructions/lsr"
 
 export const instructions: InstructionType = {
     // ADC
@@ -186,4 +187,11 @@ export const instructions: InstructionType = {
     0xb4: (cpu) => execLdy(cpu, "zero_page_x"),
     0xac: (cpu) => execLdy(cpu, "absolute"),
     0xbc: (cpu) => execLdy(cpu, "absolute_x"),
+
+    // LSR
+    0x4a: (cpu) => execLsr(cpu, "accumulator"),
+    0x46: (cpu) => execLsr(cpu, "zero_page"),
+    0x56: (cpu) => execLsr(cpu, "zero_page_x"),
+    0x4e: (cpu) => execLsr(cpu, "absolute"),
+    0x5e: (cpu) => execLsr(cpu, "absolute_x"),
 }
