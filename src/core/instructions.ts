@@ -44,6 +44,7 @@ import { execSbc } from "./instructions/sbc"
 import { execSec } from "./instructions/sec"
 import { execSed } from "./instructions/sed"
 import { execSei } from "./instructions/sei"
+import { execSta } from "./instructions/sta"
 
 export const instructions: InstructionType = {
     // ADC
@@ -250,7 +251,7 @@ export const instructions: InstructionType = {
     // RTI
     0x60: (cpu) => execRts(cpu),
 
-    // ADC
+    // SBC
     0xe9: (cpu) => execSbc(cpu, "immediate"),
     0xe5: (cpu) => execSbc(cpu, "zero_page"),
     0xf5: (cpu) => execSbc(cpu, "zero_page_x"),
@@ -268,4 +269,13 @@ export const instructions: InstructionType = {
 
     // SEI
     0x78: (cpu) => execSei(cpu),
+
+    // STA
+    0x85: (cpu) => execSta(cpu, "zero_page"),
+    0x95: (cpu) => execSta(cpu, "zero_page_x"),
+    0x8d: (cpu) => execSta(cpu, "absolute"),
+    0x9d: (cpu) => execSta(cpu, "absolute_x"),
+    0x99: (cpu) => execSta(cpu, "absolute_y"),
+    0x81: (cpu) => execSta(cpu, "indirect_x"),
+    0x91: (cpu) => execSta(cpu, "indirect_y"),
 }
