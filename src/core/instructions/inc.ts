@@ -2,6 +2,7 @@ import { addressModes } from "../../types/address.d";
 import { cpuType } from "../../types/cpu.d";
 import { addressResolve } from "../address";
 import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../flags";
+import { updateMemoryMap } from "../memory";
 
 export const execInc = (cpu: cpuType, addressMode: addressModes): void => {
     exec(cpu, addressMode);
@@ -12,6 +13,7 @@ const exec = (cpu: cpuType, addressMode: addressModes) => {
     let addressMemory = addressResolve(cpu, addressMode, true);
 
     cpu.memory[addressMemory]++;
+    updateMemoryMap(cpu, addressMemory);
 
     cpu.memory[addressMemory] == 0 ? setZeroFlag(cpu) : clearZeroFlag(cpu);
     cpu.memory[addressMemory] >> 7 ? setNegativeFlag(cpu) : clearNegativeFlag(cpu);

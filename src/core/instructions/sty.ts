@@ -1,6 +1,7 @@
 import { addressModes } from "../../types/address.d";
 import { cpuType } from "../../types/cpu.d";
 import { addressResolve } from "../address";
+import { updateMemoryMap } from "../memory";
 
 export const execSty = (cpu: cpuType, addressMode: addressModes): void => {
     exec(cpu, addressMode);
@@ -11,6 +12,7 @@ const exec = (cpu: cpuType, addressMode: addressModes) => {
     let address = cpu.memory[addressResolve(cpu, addressMode)];
 
     cpu.memory[address] = cpu.y;
+    updateMemoryMap(cpu, address);
 }
 
 const updateClock = (cpu: cpuType, addressMode: addressModes) => {
