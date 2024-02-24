@@ -41,6 +41,9 @@ import { execRor } from "./instructions/ror"
 import { execRti } from "./instructions/rti"
 import { execRts } from "./instructions/rts"
 import { execSbc } from "./instructions/sbc"
+import { execSec } from "./instructions/sec"
+import { execSed } from "./instructions/sed"
+import { execSei } from "./instructions/sei"
 
 export const instructions: InstructionType = {
     // ADC
@@ -256,4 +259,13 @@ export const instructions: InstructionType = {
     0xf9: (cpu) => execSbc(cpu, "absolute_y"),
     0xe1: (cpu) => execSbc(cpu, "indirect_x"),
     0xf1: (cpu) => execSbc(cpu, "indirect_y"),
+
+    // SEC
+    0x38: (cpu) => execSec(cpu),
+
+    // SED
+    0xf8: (cpu) => execSed(cpu),
+
+    // SEI
+    0x78: (cpu) => execSei(cpu),
 }
