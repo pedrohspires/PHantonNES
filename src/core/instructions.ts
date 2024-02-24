@@ -38,6 +38,8 @@ import { execPhp } from "./instructions/php"
 import { execPla } from "./instructions/pla"
 import { execRol } from "./instructions/rol"
 import { execRor } from "./instructions/ror"
+import { execRti } from "./instructions/rti"
+import { execRts } from "./instructions/rts"
 
 export const instructions: InstructionType = {
     // ADC
@@ -237,4 +239,10 @@ export const instructions: InstructionType = {
     0x76: (cpu) => execRor(cpu, "zero_page_x"),
     0x6e: (cpu) => execRor(cpu, "absolute"),
     0x7e: (cpu) => execRor(cpu, "absolute_x"),
+
+    // RTI
+    0x40: (cpu) => execRti(cpu),
+
+    // RTI
+    0x60: (cpu) => execRts(cpu),
 }

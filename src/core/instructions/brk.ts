@@ -3,13 +3,12 @@ import { formatNumber } from "../../utils/format";
 import { setInterruptFlag } from "../flags";
 
 export const execBrk = (cpu: cpuType): void => {
+    cpu.pc++;
     exec(cpu);
     cpu.clock += 7;
 }
 
 const exec = (cpu: cpuType) => {
-    cpu.pc++;
-
     let pcHex = formatNumber(cpu.pc);
 
     cpu.memory[cpu.sp--] = Number("0x" + pcHex.substring(0, 2));
