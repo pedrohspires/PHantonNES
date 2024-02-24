@@ -1,6 +1,6 @@
 import { addressModes } from "../../types/address.d";
 import { cpuType } from "../../types/cpu.d";
-import { isOverflow } from "../../utils/validations";
+import { isOverflowAdc } from "../../utils/validations";
 import { addressResolve } from "../address";
 import { clearCarryFlag, clearNegativeFlag, clearOverflowFlag, clearZeroFlag, setCarryFlag, setNegativeFlag, setOverflowFlag, setZeroFlag } from "../flags";
 
@@ -13,7 +13,7 @@ const exec = (cpu: cpuType, addressMode: addressModes) => {
     let content_to_add = addressMode == "immediate" ? cpu.memory[cpu.pc + 1] : cpu.memory[addressResolve(cpu, addressMode)];
     let carry = Number(cpu.p[0]);
 
-    isOverflow(cpu.a, content_to_add, carry) ? setOverflowFlag(cpu) : clearOverflowFlag(cpu);
+    isOverflowAdc(cpu.a, content_to_add, carry) ? setOverflowFlag(cpu) : clearOverflowFlag(cpu);
 
     cpu.a += content_to_add + carry;
 

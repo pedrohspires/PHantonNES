@@ -40,6 +40,7 @@ import { execRol } from "./instructions/rol"
 import { execRor } from "./instructions/ror"
 import { execRti } from "./instructions/rti"
 import { execRts } from "./instructions/rts"
+import { execSbc } from "./instructions/sbc"
 
 export const instructions: InstructionType = {
     // ADC
@@ -245,4 +246,14 @@ export const instructions: InstructionType = {
 
     // RTI
     0x60: (cpu) => execRts(cpu),
+
+    // ADC
+    0xe9: (cpu) => execSbc(cpu, "immediate"),
+    0xe5: (cpu) => execSbc(cpu, "zero_page"),
+    0xf5: (cpu) => execSbc(cpu, "zero_page_x"),
+    0xed: (cpu) => execSbc(cpu, "absolute"),
+    0xfd: (cpu) => execSbc(cpu, "absolute_x"),
+    0xf9: (cpu) => execSbc(cpu, "absolute_y"),
+    0xe1: (cpu) => execSbc(cpu, "indirect_x"),
+    0xf1: (cpu) => execSbc(cpu, "indirect_y"),
 }
