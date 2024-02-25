@@ -8,5 +8,5 @@ export const execPlp = (cpu: cpuType): void => {
 }
 
 const exec = (cpu: cpuType) => {
-    cpu.p = formatNumber(cpu.memory[cpu.sp++], 8, 2);
+    cpu.p = formatNumber(cpu.memory[++cpu.sp], 8, 2);
 }

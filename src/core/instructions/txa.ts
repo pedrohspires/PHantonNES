@@ -1,7 +1,7 @@
 import { cpuType } from "../../types/cpu.d";
 import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../flags";
 
-export const execTsa = (cpu: cpuType): void => {
+export const execTxa = (cpu: cpuType): void => {
     exec(cpu);
     cpu.pc += 1;
     cpu.clock += 2;

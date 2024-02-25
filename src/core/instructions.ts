@@ -8,6 +8,7 @@ import { execBeq } from "./instructions/beq"
 import { execBit } from "./instructions/bit"
 import { execBmi } from "./instructions/bmi"
 import { execBne } from "./instructions/bne"
+import { execBpl } from "./instructions/bpl"
 import { execBrk } from "./instructions/brk"
 import { execBvc } from "./instructions/bvc"
 import { execBvs } from "./instructions/bvs"
@@ -46,8 +47,11 @@ import { execSed } from "./instructions/sed"
 import { execSei } from "./instructions/sei"
 import { execSta } from "./instructions/sta"
 import { execStx } from "./instructions/stx"
+import { execSty } from "./instructions/sty"
 import { execTax } from "./instructions/tax"
+import { execTay } from "./instructions/tay"
 import { execTsx } from "./instructions/tsx"
+import { execTxa } from "./instructions/txa"
 import { execTxs } from "./instructions/txs"
 import { execTya } from "./instructions/tya"
 
@@ -99,7 +103,7 @@ export const instructions: InstructionType = {
     0xd0: (cpu) => execBne(cpu),
 
     // BPL
-    0x10: (cpu) => execBne(cpu),
+    0x10: (cpu) => execBpl(cpu),
 
     // BRK
     0x00: (cpu) => execBrk(cpu),
@@ -253,7 +257,7 @@ export const instructions: InstructionType = {
     // RTI
     0x40: (cpu) => execRti(cpu),
 
-    // RTI
+    // RTS
     0x60: (cpu) => execRts(cpu),
 
     // SBC
@@ -290,15 +294,21 @@ export const instructions: InstructionType = {
     0x8e: (cpu) => execStx(cpu, "absolute"),
 
     // STY
-    0x84: (cpu) => execStx(cpu, "zero_page"),
-    0x94: (cpu) => execStx(cpu, "zero_page_x"),
-    0x8c: (cpu) => execStx(cpu, "absolute"),
+    0x84: (cpu) => execSty(cpu, "zero_page"),
+    0x94: (cpu) => execSty(cpu, "zero_page_x"),
+    0x8c: (cpu) => execSty(cpu, "absolute"),
+
+    // TAX
+    0xaa: (cpu) => execTax(cpu),
+
+    // TAY
+    0xa8: (cpu) => execTay(cpu),
 
     // TSX
     0xba: (cpu) => execTsx(cpu),
 
-    // TXa
-    0x8a: (cpu) => execTax(cpu),
+    // TXA
+    0x8a: (cpu) => execTxa(cpu),
 
     // TXS
     0x9a: (cpu) => execTxs(cpu),

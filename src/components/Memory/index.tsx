@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import cpuContext from "../../context/cpuContext";
 import { formatNumber } from "../../utils/format";
 
@@ -17,7 +17,7 @@ export default function Memory() {
                         <label htmlFor="start" className="font-bold text-white">Start: </label>
                         <input
                             id="start"
-                            className="px-2 rounded-md w-12"
+                            className="px-2 rounded-md w-16"
                             value={start.toString(16)}
                             onChange={e => setStart(Number("0x" + (e.target.value || 0)))}
                         />
@@ -41,32 +41,40 @@ export default function Memory() {
             </div>
 
             <div
-                className="gap-2 mt-2 items-center justify-items-center"
+                className="mt-2 items-center justify-items-center"
                 style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(18, minmax(0, 1fr))",
                 }}
             >
+                <div className="col-span-2 w-full h-full bg-sky-950">{/* primeira coluna */}</div>
+                {new Array(16).fill(0).map((_, index) => {
+                    return (
+                        <div className="text-white bg-sky-950 px-1 font-bold" key={index}>{formatNumber(index, 2)}</div>
+                    )
+                })}
+
                 {start % 16 != 0 && (
                     <>
-                        <span className="p-1 col-span-2 text-center bg-sky-950 text-white font-bold">0x{formatNumber((start - (start % 16)))} </span>
+                        <div className="p-1 col-span-2 text-center bg-sky-950 text-white font-bold w-full">{formatNumber((start - (start % 16)))} </div>
+
                         {new Array(start % 16).fill(0).map((_, index) => {
                             return (
-                                <span key={index}>-</span>
+                                <div className="text-white font-bold" key={index}>-</div>
                             )
                         })}
                     </>
                 )}
 
-                {new Array(length).fill(0).map((_, index) => {
-                    const result = <span key={index} className="text-white">{formatNumber(cpu?.memory[start + index] || 0, 2)}</span>;
+                {new Array((length - start % 16) + 1).fill(0).map((_, index) => {
+                    const result = <div className="text-white font-bold" key={index}>{formatNumber(cpu?.memory[start + index] || 0, 2)}</div>;
 
                     if ((index + start) % 16 == 0)
                         return (
-                            <div key={index + "_row_header"} className="col-span-3 flex items-center gap-2">
-                                <span className="p-1 col-span-2 text-center bg-sky-950 text-white font-bold">0x{formatNumber((index + start))} </span>
+                            <Fragment key={index}>
+                                <div className="p-1 col-span-2 text-center bg-sky-950 text-white font-bold w-full">{formatNumber((index + start))} </div>
                                 {result}
-                            </div>
+                            </Fragment>
                         );
 
                     return result;

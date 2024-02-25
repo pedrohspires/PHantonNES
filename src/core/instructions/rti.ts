@@ -8,10 +8,10 @@ export const execRti = (cpu: cpuType): void => {
 }
 
 const exec = (cpu: cpuType) => {
-    let pcHex = "0x";
+    cpu.p = formatNumber(cpu.memory[++cpu.sp], 8, 2);
 
-    cpu.p = formatNumber(cpu.memory[cpu.sp++], 8, 2);
-    pcHex += formatNumber(cpu.memory[cpu.sp++], 2)
-    pcHex += formatNumber(cpu.memory[cpu.sp++], 2)
-    cpu.pc = Number(pcHex);
+    const msb = cpu.memory[++cpu.sp] << 8;
+    const lsb = cpu.memory[++cpu.sp];
+
+    cpu.pc = msb | lsb;
 }

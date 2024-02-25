@@ -1,5 +1,4 @@
 import { cpuType } from "../../types/cpu.d";
-import { formatNumber } from "../../utils/format";
 
 export const execRts = (cpu: cpuType): void => {
     cpu.pc++;
@@ -8,10 +7,8 @@ export const execRts = (cpu: cpuType): void => {
 }
 
 const exec = (cpu: cpuType) => {
-    let pcHex = "0x";
+    const msb = cpu.memory[++cpu.sp] << 8;
+    const lsb = cpu.memory[++cpu.sp];
 
-    pcHex += formatNumber(cpu.memory[cpu.sp++], 2)
-    pcHex += formatNumber(cpu.memory[cpu.sp++], 2)
-
-    cpu.pc = Number(pcHex) - 1;
+    cpu.pc = (msb | lsb) - 1;
 }
