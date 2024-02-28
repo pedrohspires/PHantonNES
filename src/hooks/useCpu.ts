@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { instructions } from "../core/instructions";
 import { cpuType } from "../types/cpu.d";
-import { formatNumber } from "../utils/format";
 
 type Return = [
     cpu: cpuType,
@@ -11,7 +10,6 @@ type Return = [
     nextStep: () => void,
     init: () => void,
     reset: () => void,
-    log: Array<string>
 ]
 
 const useCpu = (): Return => {
@@ -27,7 +25,6 @@ const useCpu = (): Return => {
     });
     const [debug, setDebug] = useState<boolean>(false);
     const [romLoaded, setRomLoaded] = useState<boolean>(false);
-    const [log, setLog] = useState<Array<string>>([]);
     const [rom, setRom] = useState<Uint8Array>(new Uint8Array());
 
     const getInitialStateCpu = (cpu: cpuType, rom: Uint8Array) => {
@@ -47,7 +44,6 @@ const useCpu = (): Return => {
             cpu.memory = [...cpu.memory.slice(0, 0xc000), ...pgrBanks];
 
         cpu.pc = (cpu.memory[0xfffd] << 8) | cpu.memory[0xfffc];
-        console.log(cpu.pc)
     }
 
     const loadRom = (rom: Uint8Array) => {
@@ -56,7 +52,6 @@ const useCpu = (): Return => {
 
             setCpu({ ...cpu, })
             setRom(rom);
-            addLog(`ROM carregada!`);
             setRomLoaded(true);
         }
     }
@@ -68,47 +63,21 @@ const useCpu = (): Return => {
     }
 
     const execOpCode = (opCode: number) => {
-        logOpCode(opCode);
         const opCodeFunction = instructions[opCode];
 
         opCodeFunction(cpu);
         setCpu({ ...cpu });
     }
 
-    const logOpCode = (opCode: number) => {
-        let instruction = instructions[opCode]?.toString()?.split(" => exec")[1]?.split("(")[0]
-        let addressMode = instructions[opCode]?.toString()?.split('(cpu, "')[1]?.split('")')[0]
-
-        addLog(`
-            PC: 0x${formatNumber(cpu.pc || 0)} <br/>
-            OPCODE: 0x${formatNumber(opCode || 0, 2)} <br/>
-            INSTRUCTION: ${instruction} <br/>
-            ADDRESS MODE: ${addressMode || "Implied"}
-        `)
-    }
-
     const nextStep = () => romLoaded && execOpCode(cpu.memory[cpu.pc])
 
     const init = () => loop();
-
-    const addLog = (strLog: string) => {
-        let logAux = log;
-        if (log.length > 10000)
-            logAux = ["CLEAR LOG", "----------"];
-        else {
-            logAux.push(strLog)
-            logAux.push("----------")
-        }
-
-        setLog(logAux);
-    }
 
     const reset = () => {
         getInitialStateCpu(cpu, rom);
 
         setCpu({ ...cpu, })
         setRom(rom);
-        addLog(`Sistema resetado!`);
     }
 
     return [
@@ -119,7 +88,6 @@ const useCpu = (): Return => {
         nextStep,
         init,
         reset,
-        log
     ];
 }
 

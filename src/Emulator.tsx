@@ -6,14 +6,12 @@ import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { Id, toast } from "react-toastify";
 import Debug from "./components/Debug";
 import Modal from "./components/Modal";
-import ModalLateral from "./components/ModalLateral";
 import { CpuContextProvider } from "./context/cpuContext";
 import useCpu from "./hooks/useCpu";
 
 function Emulador() {
-    const [cpu, loadRom, isDebug, setDebug, nextStep, init, reset, log] = useCpu();
+    const [cpu, loadRom, isDebug, setDebug, nextStep, init, reset] = useCpu();
     const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const [modalLoglOpen, setModalLogOpen] = useState<boolean>(false);
     const loadingRef = useRef<Id | any>();
     const [animationParent] = useAutoAnimate()
 
@@ -78,16 +76,11 @@ function Emulador() {
                                 </li>
                             </>
                         )}
-                        <li className="hover:bg-black/50">
-                            <button onClick={() => setModalLogOpen(!modalLoglOpen)} className="flex place-items-center px-4 gap-2 w-full h-full">
-                                {modalLoglOpen ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}  Ver log
-                            </button>
-                        </li>
                     </ul>
 
                     <div ref={animationParent} className={`w-full h-full grid ${isDebug ? "grid-cols-2" : "grid-cols-1"} place-items-center`}>
                         {isDebug && (
-                            <div className="w-[512px] h-4/6">
+                            <div className="w-[512px] h-[464px]">
                                 <Debug />
                             </div>
                         )}
@@ -108,17 +101,6 @@ function Emulador() {
                     <input type="file" onChange={handleRomSelect} accept=".nes" />
                 </div>
             </Modal>
-
-            <ModalLateral
-                titulo="LOG"
-                isOpen={modalLoglOpen}
-                closeModal={setModalLogOpen}
-                notCloseOnClickOverlay
-            >
-                <div>
-                    {log.map((item, index) => <div key={item + "_" + index} dangerouslySetInnerHTML={{ __html: item }} />)}
-                </div>
-            </ModalLateral>
         </CpuContextProvider>
     )
 }
