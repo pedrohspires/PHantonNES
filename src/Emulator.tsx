@@ -1,19 +1,18 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { FaFileAlt, FaPlay, FaStepForward } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { Id, toast } from "react-toastify";
 import Debug from "./components/Debug";
-import Modal from "./components/Modal";
 import { CpuContextProvider } from "./context/cpuContext";
 import useCpu from "./hooks/useCpu";
 
 function Emulador() {
     const [cpu, loadRom, isDebug, setDebug, nextStep, init, reset] = useCpu();
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
     const loadingRef = useRef<Id | any>();
     const [animationParent] = useAutoAnimate()
+    const inputRomId = "input-rom";
 
     const handleRomSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
@@ -25,8 +24,7 @@ function Emulador() {
             reader.onload = event => {
                 if (event.target?.result) {
                     const rom = new Uint8Array(event.target?.result as ArrayBuffer);
-                    loadRom(rom);
-                    setModalOpen(false);
+                    loadRom(rom)
                     toast.update(loadingRef.current, {
                         type: "success",
                         render: "ROM carregada!",
@@ -48,7 +46,7 @@ function Emulador() {
                 <div className="flex flex-col">
                     <ul className="h-12 w-full bg-black/25 flex font-bold text-white">
                         <li className="hover:bg-black/50">
-                            <button onClick={() => setModalOpen(true)} className="flex place-items-center px-4 gap-2 w-full h-full">
+                            <button onClick={() => document.getElementById(inputRomId)?.click()} className="flex place-items-center px-4 gap-2 w-full h-full">
                                 <FaFileAlt />  Carregar ROM
                             </button>
                         </li>
@@ -92,15 +90,7 @@ function Emulador() {
                 </div>
             </div>
 
-            <Modal
-                titulo="Selecione a ROM"
-                isOpen={modalOpen}
-                closeModal={setModalOpen}
-            >
-                <div>
-                    <input type="file" onChange={handleRomSelect} accept=".nes" />
-                </div>
-            </Modal>
+            <input id={inputRomId} className="hidden" type="file" onChange={handleRomSelect} accept=".nes" />
         </CpuContextProvider>
     )
 }

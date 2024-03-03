@@ -3,7 +3,6 @@ import { formatNumber } from "../../utils/format";
 
 export const execBvc = (cpu: cpuType): void => {
     exec(cpu);
-    cpu.pc += 2;
 }
 
 const exec = (cpu: cpuType) => {
