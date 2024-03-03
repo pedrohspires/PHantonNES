@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import * as ReactModal from 'react-modal';
+import Modal from 'react-modal';
 
 type Props = {
     titulo: string;
@@ -8,9 +8,9 @@ type Props = {
     children?: ReactNode;
 }
 
-export default function Modal({ titulo, isOpen, closeModal, children }: Props) {
+export default function MyModal({ titulo, isOpen, closeModal, children }: Props) {
     return (
-        <ReactModal
+        <Modal
             isOpen={isOpen}
             onRequestClose={() => closeModal(false)}
             overlayClassName="bg-gray-500/50 w-screen h-screen absolute top-0 grid place-items-center"
@@ -21,6 +21,6 @@ export default function Modal({ titulo, isOpen, closeModal, children }: Props) {
             <div>
                 {children}
             </div>
-        </ReactModal>
+        </Modal>
     )
 }
