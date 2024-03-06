@@ -10,7 +10,7 @@ export const execAdc = (cpu: cpuType, addressMode: addressModes): void => {
 }
 
 const exec = (cpu: cpuType, addressMode: addressModes) => {
-    let content_to_add = addressMode == "immediate" ? cpu.memory[cpu.pc + 1] : cpu.memory[addressResolve(cpu, addressMode)];
+    let content_to_add = cpu.memory[addressResolve(cpu, addressMode)];
     let carry = Number(cpu.p[0]);
 
     isOverflow(cpu.a, content_to_add, carry) ? setOverflowFlag(cpu) : clearOverflowFlag(cpu);

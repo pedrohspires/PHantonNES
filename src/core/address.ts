@@ -1,40 +1,38 @@
 import { addressModes } from "../types/address.d";
 import { cpuType } from "../types/cpu.d";
-import { formatNumber } from "../utils/format";
-
-const getCombinedAddress = (lowByte: number, highByte: number) => {
-    return Number("0x" + formatNumber(highByte, 2) + formatNumber(lowByte, 2))
-};
+import { getCombinedAddress, readFirstArgument, readSecondArgument } from "../utils/address";
 
 export const addressResolve = (cpu: cpuType, mode: addressModes, ignorePageCrossed?: boolean): number => {
     switch (mode) {
-        case "zero_page": return cpu.memory[cpu.pc + 1];
+        case "immediate": return cpu.pc + 1;
+
+        case "zero_page": return readFirstArgument(cpu);
 
         case "zero_page_x": {
-            const arg = cpu.memory[cpu.pc + 1];
+            const arg = readFirstArgument(cpu);
             const result = arg + cpu.x;
 
             return result > 0xff ? result - 0x100 : result;
         }
 
         case "zero_page_y": {
-            const arg = cpu.pc + 1;
+            const arg = readFirstArgument(cpu);
             const result = arg + cpu.y;
             return result > 0xff ? result - 0x100 : result;
         }
 
         case "absolute": {
-            const arg1 = cpu.memory[cpu.pc + 1];
-            const arg2 = cpu.memory[cpu.pc + 2];
+            const LSB = readFirstArgument(cpu);
+            const MSB = readSecondArgument(cpu);
 
-            return getCombinedAddress(arg1, arg2);
+            return getCombinedAddress(LSB, MSB);
         }
 
         case "absolute_x": {
-            const arg1 = cpu.memory[cpu.pc + 1];
-            const arg2 = cpu.memory[cpu.pc + 2];
+            const LSB = readFirstArgument(cpu);
+            const MSB = readSecondArgument(cpu);
 
-            let addressAbsolute = getCombinedAddress(arg1, arg2);
+            let addressAbsolute = getCombinedAddress(LSB, MSB);
 
             let address = addressAbsolute + cpu.x;
 
@@ -45,10 +43,10 @@ export const addressResolve = (cpu: cpuType, mode: addressModes, ignorePageCross
         }
 
         case "absolute_y": {
-            const arg1 = cpu.memory[cpu.pc + 1];
-            const arg2 = cpu.memory[cpu.pc + 2];
+            const LSB = readFirstArgument(cpu);
+            const MSB = readSecondArgument(cpu);
 
-            let addressAbsolute = getCombinedAddress(arg1, arg2);
+            let addressAbsolute = getCombinedAddress(LSB, MSB);
 
             let address = addressAbsolute + cpu.y;
 
@@ -59,30 +57,34 @@ export const addressResolve = (cpu: cpuType, mode: addressModes, ignorePageCross
         }
 
         case "indirect": {
-            const arg1 = cpu.memory[cpu.pc + 1];
-            const arg2 = cpu.memory[cpu.pc + 2];
+            let LSB = readFirstArgument(cpu);
+            let MSB = readSecondArgument(cpu);
 
-            let addressResolved = getCombinedAddress(arg1, arg2);
-            const lowByte = cpu.memory[addressResolved];
-            const highByte = cpu.memory[addressResolved + 1];
+            let addressResolved = getCombinedAddress(LSB, MSB);
+            LSB = cpu.memory[addressResolved];
+            MSB = cpu.memory[addressResolved + 1];
 
-            return getCombinedAddress(lowByte, highByte);
+            return getCombinedAddress(LSB, MSB);
         }
 
         case "indirect_x": {
-            const addressIndirect = cpu.memory[cpu.pc + 1] + cpu.x;
-            const arg1 = cpu.memory[addressIndirect];
-            const arg2 = cpu.memory[addressIndirect + 1];
+            const addressIndirect = readFirstArgument(cpu) + cpu.x;
+            const LSB = cpu.memory[addressIndirect];
+            const MSB = cpu.memory[addressIndirect + 1];
 
-            return getCombinedAddress(arg1, arg2);
+            return getCombinedAddress(LSB, MSB);
         }
 
         case "indirect_y": {
-            const addressIndirect = cpu.memory[cpu.pc + 1] + cpu.y;
-            const arg1 = cpu.memory[addressIndirect];
-            const arg2 = cpu.memory[addressIndirect + 1];
+            const addressIndirect = readFirstArgument(cpu) + cpu.y;
+            const LSB = cpu.memory[addressIndirect];
+            const MSB = cpu.memory[addressIndirect + 1];
+            const address = getCombinedAddress(LSB, MSB);
 
-            return getCombinedAddress(arg1, arg2);
+            if (address.toString(16).slice(0, 2) != addressIndirect.toString(16).slice(0, 2) && !ignorePageCrossed)
+                cpu.clock++;
+
+            return address;
         }
     }
 

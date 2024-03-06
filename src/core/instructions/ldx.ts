@@ -9,7 +9,7 @@ export const execLdx = (cpu: cpuType, addressMode: addressModes): void => {
 }
 
 const exec = (cpu: cpuType, addressMode: addressModes) => {
-    let content_to_ldx = addressMode == "immediate" ? cpu.memory[cpu.pc + 1] : cpu.memory[addressResolve(cpu, addressMode)];
+    let content_to_ldx = cpu.memory[addressResolve(cpu, addressMode)];
     cpu.x = content_to_ldx;
 
     cpu.x == 0 ? setZeroFlag(cpu) : clearZeroFlag(cpu);

@@ -9,7 +9,7 @@ export const execCmp = (cpu: cpuType, addressMode: addressModes): void => {
 }
 
 const exec = (cpu: cpuType, addressMode: addressModes) => {
-    let content_to_cmp = addressMode == "immediate" ? cpu.memory[cpu.pc + 1] : cpu.memory[addressResolve(cpu, addressMode)];
+    let content_to_cmp = cpu.memory[addressResolve(cpu, addressMode)];
 
     cpu.a >= content_to_cmp ? setCarryFlag(cpu) : clearCarryFlag(cpu);
     cpu.a == content_to_cmp ? setZeroFlag(cpu) : clearZeroFlag(cpu);

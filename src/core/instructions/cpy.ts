@@ -9,7 +9,7 @@ export const execCpy = (cpu: cpuType, addressMode: addressModes): void => {
 }
 
 const exec = (cpu: cpuType, addressMode: addressModes) => {
-    let content_to_cpy = addressMode == "immediate" ? cpu.memory[cpu.pc + 1] : cpu.memory[addressResolve(cpu, addressMode)];
+    let content_to_cpy = cpu.memory[addressResolve(cpu, addressMode)];
 
     cpu.y >= content_to_cpy ? setCarryFlag(cpu) : clearCarryFlag(cpu);
     cpu.y == content_to_cpy ? setZeroFlag(cpu) : clearZeroFlag(cpu);

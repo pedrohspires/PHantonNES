@@ -9,7 +9,7 @@ export const execLdy = (cpu: cpuType, addressMode: addressModes): void => {
 }
 
 const exec = (cpu: cpuType, addressMode: addressModes) => {
-    let content_to_ldy = addressMode == "immediate" ? cpu.memory[cpu.pc + 1] : cpu.memory[addressResolve(cpu, addressMode)];
+    let content_to_ldy = cpu.memory[addressResolve(cpu, addressMode)];
     cpu.y = content_to_ldy;
 
     cpu.y == 0 ? setZeroFlag(cpu) : clearZeroFlag(cpu);
