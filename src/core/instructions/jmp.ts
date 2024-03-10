@@ -23,5 +23,5 @@ const updateClock = (cpu: cpuType, addressMode: addressModes) => {
     }
 
     cpu.clock += clocksToAdd;
-    cpu.pc += pcToAdd;
+    // cpu.pc += pcToAdd;
 }
