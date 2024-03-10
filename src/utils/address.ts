@@ -12,3 +12,11 @@ export const readFirstArgument = (cpu: cpuType) => {
 export const readSecondArgument = (cpu: cpuType) => {
     return cpu.memory[cpu.pc + 2];
 }
+
+export const getNumberFromSignedByte = (byte: number) => {
+    if ((byte >> 7) === 0) {
+        return byte;
+    } else {
+        return 0 - byte & 0x7F;
+    }
+}

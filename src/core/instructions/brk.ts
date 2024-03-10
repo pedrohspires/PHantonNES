@@ -1,5 +1,5 @@
 import { cpuType } from "../../types/cpu.d";
-import { formatNumber } from "../../utils/format";
+import { getCombinedAddress } from "../../utils/address";
 import { setInterruptFlag } from "../flags";
 import { updateMemoryMap } from "../memory";
 
@@ -17,8 +17,6 @@ const exec = (cpu: cpuType) => {
     cpu.memory[cpu.sp--] = Number("0b" + cpu.p);
     updateMemoryMap(cpu, cpu.sp--);
 
-    let vetInterrupt = "0x" + formatNumber(cpu.memory[0xffff], 2, 16) + formatNumber(cpu.memory[0xfffe], 2, 16);
-
-    cpu.pc = Number(vetInterrupt);
+    cpu.pc = getCombinedAddress(cpu.memory[0xfffe], cpu.memory[0xffff]);
     setInterruptFlag(cpu);
 }
