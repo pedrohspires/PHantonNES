@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { instructions } from "../core/instructions";
+import { instructions } from "../core/CPU/instructions";
 import { cpuType } from "../types/cpu.d";
 import { formatNumber } from "../utils/format";
 
