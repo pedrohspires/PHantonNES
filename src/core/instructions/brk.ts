@@ -4,16 +4,22 @@ import { setInterruptFlag } from "../flags";
 import { updateMemoryMap } from "../memory";
 
 export const execBrk = (cpu: cpuType): void => {
-    cpu.pc++;
     exec(cpu);
     cpu.clock += 7;
 }
 
 const exec = (cpu: cpuType) => {
-    cpu.memory[cpu.sp] = (cpu.pc >> 8) & 0xff;
+    cpu.pc++;
+
+    // LSB na pilha
+    cpu.memory[cpu.sp] = cpu.pc & 0xff;
     updateMemoryMap(cpu, cpu.sp--);
-    cpu.memory[cpu.sp--] = cpu.pc % 0x100;
+
+    // MSB na pilha
+    cpu.memory[cpu.sp--] = cpu.pc >> 8;
     updateMemoryMap(cpu, cpu.sp--);
+
+    // Status na pilha
     cpu.memory[cpu.sp--] = Number("0b" + cpu.p);
     updateMemoryMap(cpu, cpu.sp--);
 

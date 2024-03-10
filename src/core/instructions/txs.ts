@@ -7,5 +7,5 @@ export const execTxs = (cpu: cpuType): void => {
 }
 
 const exec = (cpu: cpuType) => {
-    cpu.sp = cpu.x;
+    cpu.a = cpu.x;
 }

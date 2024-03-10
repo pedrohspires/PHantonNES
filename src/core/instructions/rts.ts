@@ -1,7 +1,6 @@
 import { cpuType } from "../../types/cpu.d";
 
 export const execRts = (cpu: cpuType): void => {
-    cpu.pc++;
     exec(cpu);
     cpu.clock += 6;
 }

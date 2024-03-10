@@ -8,12 +8,14 @@ export const execJsr = (cpu: cpuType): void => {
 }
 
 const exec = (cpu: cpuType) => {
-    cpu.memory[cpu.sp] = ((cpu.pc - 1) >> 8 & 0xff);
-    updateMemoryMap(cpu, cpu.sp--);
-    cpu.memory[cpu.sp] = (cpu.pc - 1) % 0x100;
+    let address_to_jsr = addressResolve(cpu, "absolute", true);
+    cpu.pc += 3;
+
+    cpu.memory[cpu.sp] = ((cpu.pc - 1) & 0xff);
     updateMemoryMap(cpu, cpu.sp--);
 
-    let address_to_jsr = addressResolve(cpu, "absolute", true);
+    cpu.memory[cpu.sp] = (cpu.pc - 1) >> 8;
+    updateMemoryMap(cpu, cpu.sp--);
 
     cpu.pc = address_to_jsr;
 }
