@@ -62,7 +62,7 @@ const useCpu = (): Return => {
     }
 
     const loop = () => {
-        while (!debug && romLoaded) {
+        while (romLoaded) {
             execOpCode(cpu.memory[cpu.pc])
         }
     }

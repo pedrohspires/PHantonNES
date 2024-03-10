@@ -9,5 +9,5 @@ const exec = (cpu: cpuType) => {
     const msb = cpu.memory[++cpu.sp] << 8;
     const lsb = cpu.memory[++cpu.sp];
 
-    cpu.pc = (msb | lsb) - 1;
+    cpu.pc = msb | lsb;
 }

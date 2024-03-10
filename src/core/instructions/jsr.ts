@@ -11,10 +11,10 @@ const exec = (cpu: cpuType) => {
     let address_to_jsr = addressResolve(cpu, "absolute", true);
     cpu.pc += 3;
 
-    cpu.memory[cpu.sp] = ((cpu.pc - 1) & 0xff);
+    cpu.memory[cpu.sp] = cpu.pc & 0xff;
     updateMemoryMap(cpu, cpu.sp--);
 
-    cpu.memory[cpu.sp] = (cpu.pc - 1) >> 8;
+    cpu.memory[cpu.sp] = cpu.pc >> 8;
     updateMemoryMap(cpu, cpu.sp--);
 
     cpu.pc = address_to_jsr;

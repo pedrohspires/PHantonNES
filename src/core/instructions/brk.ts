@@ -23,6 +23,6 @@ const exec = (cpu: cpuType) => {
     cpu.memory[cpu.sp--] = Number("0b" + cpu.p);
     updateMemoryMap(cpu, cpu.sp--);
 
-    cpu.pc = getCombinedAddress(cpu.memory[0xfffe], cpu.memory[0xffff]);
+    cpu.pc = getCombinedAddress(cpu.memory[0xfffa], cpu.memory[0xfffb]);
     setInterruptFlag(cpu);
 }
