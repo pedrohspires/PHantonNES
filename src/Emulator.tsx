@@ -5,13 +5,15 @@ import { GrPowerReset } from "react-icons/gr";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { Id, toast } from "react-toastify";
 import Debug from "./components/Debug";
+import Ppu from "./components/Ppu";
 import { CpuContextProvider } from "./context/cpuContext";
 import useCpu from "./hooks/useCpu";
 
 function Emulador() {
-    const [cpu, loadRom, isDebug, setDebug, nextStep, init, reset] = useCpu();
-    const loadingRef = useRef<Id | any>();
     const [animationParent] = useAutoAnimate()
+    const { cpuState, loadRom, isDebug, setIsDebug, nextStep, init, reset, readCpuMemory, writeCpuMemory } = useCpu();
+
+    const loadingRef = useRef<Id | any>();
     const inputRomId = "input-rom";
 
     const handleRomSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,13 +36,12 @@ function Emulador() {
                 }
             }
 
-
             reader.readAsArrayBuffer(event.target.files[0]);
         }
     }
 
     return (
-        <CpuContextProvider value={cpu}>
+        <CpuContextProvider value={cpuState}>
             {/* Same as */}
             <div className={`w-screen h-screen bg-sky-900 grid grid-cols-1`} >
                 <div className="flex flex-col">
@@ -61,7 +62,7 @@ function Emulador() {
                             </button>
                         </li>
                         <li className="hover:bg-black/50">
-                            <button onClick={() => setDebug(!isDebug)} className="flex place-items-center px-4 gap-2 w-full h-full">
+                            <button onClick={() => setIsDebug(!isDebug)} className="flex place-items-center px-4 gap-2 w-full h-full">
                                 {isDebug ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}  Modo Debug
                             </button>
                         </li>
@@ -84,7 +85,9 @@ function Emulador() {
                         )}
 
                         <div className="w-[528px] h-[448px] rounded-md p-2 bg-sky-600">
-                            <div className="w-full h-full bg-black"></div>
+                            <div className="w-full h-full bg-black">
+                                <Ppu readCpuMemory={readCpuMemory} writeCpuMemory={writeCpuMemory} />
+                            </div>
                         </div>
                     </div>
                 </div>

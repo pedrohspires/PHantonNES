@@ -4,15 +4,17 @@ import { instructions } from "../core/CPU/instructions";
 import { cpuType } from "../types/cpu.d";
 import { formatNumber } from "../utils/format";
 
-type Return = [
-    cpu: cpuType,
+type Return = {
+    cpuState: cpuType,
     loadRom: (rom: Uint8Array) => void,
     isDebug: boolean,
-    setDebug: React.Dispatch<React.SetStateAction<boolean>>,
+    setIsDebug: React.Dispatch<React.SetStateAction<boolean>>,
     nextStep: () => void,
     init: () => void,
     reset: () => void,
-]
+    readCpuMemory: (address: number) => void,
+    writeCpuMemory: (address: number, content: number) => void
+}
 
 const useCpu = (): Return => {
     const cpuInitialState = {
@@ -26,10 +28,11 @@ const useCpu = (): Return => {
         p: "00000000" // CZIDB-VN -> indices -> 01234567
     }
 
-    const [cpu, setCpu] = useState<cpuType>(cpuInitialState);
-    const [debug, setDebug] = useState<boolean>(true);
+    const [cpuState, setCpuState] = useState<cpuType>(cpuInitialState);
+    const [isDebug, setIsDebug] = useState<boolean>(true);
     const [romLoaded, setRomLoaded] = useState<boolean>(false);
     const [rom, setRom] = useState<Uint8Array>(new Uint8Array());
+    const cpuInternal = cpuInitialState;
 
     const getInitialStateCpu = (cpu: cpuType, rom: Uint8Array) => {
         const pgrLength = rom[4];
@@ -49,12 +52,12 @@ const useCpu = (): Return => {
             cpu.memory = [...cpu.memory.slice(0, 0xc000), ...pgrBanks];
 
         cpu.pc = (cpu.memory[0xfffd] << 8) | cpu.memory[0xfffc];
-        setCpu({ ...cpu, });
+        setCpuState({ ...cpu, });
     }
 
     const loadRom = (rom: Uint8Array) => {
         if (rom[0] == 78 && rom[1] == 69 && rom[2] == 83) {
-            getInitialStateCpu(cpu, rom);
+            getInitialStateCpu(cpuInternal, rom);
 
             setRom(rom);
             setRomLoaded(true);
@@ -63,7 +66,7 @@ const useCpu = (): Return => {
 
     const loop = () => {
         while (romLoaded) {
-            execOpCode(cpu.memory[cpu.pc])
+            execOpCode(cpuInternal.memory[cpuInternal.pc])
         }
     }
 
@@ -72,28 +75,38 @@ const useCpu = (): Return => {
 
         console.log(formatNumber(opCode, 2), ": ", opCodeFunction)
 
-        opCodeFunction(cpu);
-        setCpu({ ...cpu });
+        opCodeFunction(cpuInternal);
+        setCpuState({ ...cpuInternal });
     }
 
-    const nextStep = () => romLoaded && execOpCode(cpu.memory[cpu.pc])
+    const nextStep = () => romLoaded && execOpCode(cpuInternal.memory[cpuInternal.pc])
 
     const init = () => loop();
 
     const reset = () => {
-        getInitialStateCpu(cpu, rom);
+        getInitialStateCpu(cpuInternal, rom);
         setRom(rom);
     }
 
-    return [
-        cpu,
+    const readCpuMemory = (address: number) => {
+        return cpuInternal.memory[address];
+    }
+
+    const writeCpuMemory = (address: number, content: number) => {
+        cpuInternal.memory[address] = content;
+    }
+
+    return {
+        cpuState,
         loadRom,
-        debug,
-        setDebug,
+        isDebug,
+        setIsDebug,
         nextStep,
         init,
         reset,
-    ];
+        readCpuMemory,
+        writeCpuMemory
+    };
 }
 
 export default useCpu;
