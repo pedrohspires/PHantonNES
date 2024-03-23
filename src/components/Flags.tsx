@@ -1,8 +1,10 @@
-import { useContext } from "react";
-import cpuContext from "../../context/cpuContext";
+import { cpuType } from "../types/cpu.d";
 
-export default function Flags() {
-    const cpu = useContext(cpuContext);
+type Props = {
+    cpu: cpuType,
+}
+
+export default function Flags({ cpu }: Props) {
     const flags = "NV-BDIZC";
 
     const renderFlag = (value: string, label: string): JSX.Element => {

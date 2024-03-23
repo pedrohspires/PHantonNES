@@ -1,9 +1,12 @@
-import { Fragment, useContext, useState } from "react";
-import cpuContext from "../../context/cpuContext";
-import { formatNumber } from "../../utils/format";
+import { Fragment, useState } from "react";
+import { cpuType } from "../types/cpu.d";
+import { formatNumber } from "../utils/format";
 
-export default function Memory() {
-    const cpu = useContext(cpuContext);
+type Props = {
+    cpu: cpuType,
+}
+
+export default function Memory({ cpu }: Props) {
     const [start, setStart] = useState<number>(0x00);
     const [length, setLength] = useState<number>(0xff);
 

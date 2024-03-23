@@ -5,7 +5,7 @@ import { cpuType } from "../types/cpu.d";
 import { formatNumber } from "../utils/format";
 
 type Return = {
-    cpuState: cpuType,
+    cpu: cpuType,
     loadRom: (rom: Uint8Array) => void,
     isDebug: boolean,
     setIsDebug: React.Dispatch<React.SetStateAction<boolean>>,
@@ -26,7 +26,7 @@ const useCpu = (): Return => {
         p: "00000000" // CZIDB-VN -> indices -> 01234567
     }
 
-    const [cpuState, setCpuState] = useState<cpuType>(cpuInitialState);
+    const [cpu, setCpu] = useState<cpuType>(cpuInitialState);
     const [isDebug, setIsDebug] = useState<boolean>(true);
     const [romLoaded, setRomLoaded] = useState<boolean>(false);
     const [rom, setRom] = useState<Uint8Array>(new Uint8Array());
@@ -50,7 +50,7 @@ const useCpu = (): Return => {
             cpu.memory = [...cpu.memory.slice(0, 0xc000), ...pgrBanks];
 
         cpu.pc = (cpu.memory[0xfffd] << 8) | cpu.memory[0xfffc];
-        setCpuState({ ...cpu, });
+        setCpu({ ...cpu, });
     }
 
     const loadRom = (rom: Uint8Array) => {
@@ -74,7 +74,7 @@ const useCpu = (): Return => {
         console.log(formatNumber(opCode, 2), ": ", opCodeFunction)
 
         opCodeFunction(cpuInternal);
-        setCpuState({ ...cpuInternal });
+        setCpu({ ...cpuInternal });
     }
 
     const nextStep = () => romLoaded && execOpCode(cpuInternal.memory[cpuInternal.pc])
@@ -87,7 +87,7 @@ const useCpu = (): Return => {
     }
 
     return {
-        cpuState,
+        cpu,
         loadRom,
         isDebug,
         setIsDebug,

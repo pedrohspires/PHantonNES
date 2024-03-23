@@ -1,11 +1,13 @@
-import { useContext } from "react";
-import cpuContext from "../../context/cpuContext";
-import Flags from "../Flags";
-import Memory from "../Memory";
-import Register from "../Register";
+import { cpuType } from "../types/cpu.d";
+import Flags from "./Flags";
+import Memory from "./Memory";
+import Register from "./Register";
 
-export default function Debug() {
-    const cpu = useContext(cpuContext);
+type Props = {
+    cpu: cpuType,
+}
+
+export default function Debug({ cpu }: Props) {
 
     return (
         <div className="w-full h-full bg-sky-600 rounded-md p-4 flex flex-col gap-4">
@@ -21,9 +23,9 @@ export default function Debug() {
                 <Register value={cpu !== null ? cpu?.clock : null} label="Clock" is16Bits />
             </div>
 
-            <Flags />
+            <Flags cpu={cpu} />
 
-            <Memory />
+            <Memory cpu={cpu} />
         </div>
     )
 }
