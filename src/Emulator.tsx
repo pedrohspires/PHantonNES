@@ -5,13 +5,12 @@ import { GrPowerReset } from "react-icons/gr";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { Id, toast } from "react-toastify";
 import Debug from "./components/Debug";
-import Ppu from "./components/Ppu";
 import { CpuContextProvider } from "./context/cpuContext";
 import useCpu from "./hooks/useCpu";
 
 function Emulador() {
     const [animationParent] = useAutoAnimate()
-    const { cpuState, loadRom, isDebug, setIsDebug, nextStep, init, reset, readCpuMemory, writeCpuMemory } = useCpu();
+    const { cpuState, loadRom, isDebug, setIsDebug, nextStep, init, reset } = useCpu();
 
     const loadingRef = useRef<Id | any>();
     const inputRomId = "input-rom";
@@ -86,7 +85,7 @@ function Emulador() {
 
                         <div className="w-[528px] h-[448px] rounded-md p-2 bg-sky-600">
                             <div className="w-full h-full bg-black">
-                                <Ppu readCpuMemory={readCpuMemory} writeCpuMemory={writeCpuMemory} />
+                                {/* <Ppu readCpuMemory={readCpuMemory} writeCpuMemory={writeCpuMemory} /> */}
                             </div>
                         </div>
                     </div>

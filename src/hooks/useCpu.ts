@@ -12,8 +12,6 @@ type Return = {
     nextStep: () => void,
     init: () => void,
     reset: () => void,
-    readCpuMemory: (address: number) => void,
-    writeCpuMemory: (address: number, content: number) => void
 }
 
 const useCpu = (): Return => {
@@ -88,14 +86,6 @@ const useCpu = (): Return => {
         setRom(rom);
     }
 
-    const readCpuMemory = (address: number) => {
-        return cpuInternal.memory[address];
-    }
-
-    const writeCpuMemory = (address: number, content: number) => {
-        cpuInternal.memory[address] = content;
-    }
-
     return {
         cpuState,
         loadRom,
@@ -103,9 +93,7 @@ const useCpu = (): Return => {
         setIsDebug,
         nextStep,
         init,
-        reset,
-        readCpuMemory,
-        writeCpuMemory
+        reset
     };
 }
 
