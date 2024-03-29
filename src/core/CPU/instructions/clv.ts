@@ -1,5 +1,5 @@
 import { cpuType } from "../../../types/cpu.d";
-import { clearOverflowFlag } from "../flags";
+import { clearOverflowFlag } from "../../../utils/flags";
 
 export const execClv = (cpu: cpuType): void => {
     exec(cpu);

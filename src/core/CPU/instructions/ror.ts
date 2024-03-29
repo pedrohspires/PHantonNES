@@ -1,8 +1,8 @@
 import { addressModes } from "../../../types/address.d";
 import { cpuType } from "../../../types/cpu.d";
+import { clearCarryFlag, clearNegativeFlag, clearZeroFlag, setCarryFlag, setNegativeFlag, setZeroFlag } from "../../../utils/flags";
 import { formatNumber } from "../../../utils/format";
 import { addressResolve } from "../address";
-import { clearCarryFlag, clearNegativeFlag, clearZeroFlag, setCarryFlag, setNegativeFlag, setZeroFlag } from "../flags";
 import { updateMemoryMap } from "../memory";
 
 export const execRor = (cpu: cpuType, addressMode: addressModes): void => {

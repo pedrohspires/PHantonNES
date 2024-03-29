@@ -1,4 +1,4 @@
-import { cpuType } from "../../types/cpu.d";
+import { cpuType } from "../types/cpu.d";
 
 export const updateMemoryMap = (cpu: cpuType, addr: number) => {
     if (addr < 0x0800) {

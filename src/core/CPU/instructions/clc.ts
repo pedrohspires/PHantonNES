@@ -1,5 +1,5 @@
 import { cpuType } from "../../../types/cpu.d";
-import { clearCarryFlag } from "../flags";
+import { clearCarryFlag } from "../../../utils/flags";
 
 export const execClc = (cpu: cpuType): void => {
     exec(cpu);

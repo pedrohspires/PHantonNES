@@ -1,7 +1,7 @@
 import { addressModes } from "../../../types/address.d";
 import { cpuType } from "../../../types/cpu.d";
+import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../../../utils/flags";
 import { addressResolve } from "../address";
-import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../flags";
 import { updateMemoryMap } from "../memory";
 
 export const execInc = (cpu: cpuType, addressMode: addressModes): void => {

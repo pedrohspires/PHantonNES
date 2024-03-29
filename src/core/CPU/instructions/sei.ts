@@ -1,5 +1,5 @@
 import { cpuType } from "../../../types/cpu.d";
-import { setInterruptFlag } from "../flags";
+import { setInterruptFlag } from "../../../utils/flags";
 
 export const execSei = (cpu: cpuType): void => {
     exec(cpu);

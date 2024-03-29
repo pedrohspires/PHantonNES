@@ -1,7 +1,7 @@
 import { addressModes } from "../../../types/address.d";
 import { cpuType } from "../../../types/cpu.d";
+import { clearNegativeFlag, clearOverflowFlag, clearZeroFlag, setNegativeFlag, setOverflowFlag, setZeroFlag } from "../../../utils/flags";
 import { addressResolve } from "../address";
-import { clearNegativeFlag, clearOverflowFlag, clearZeroFlag, setNegativeFlag, setOverflowFlag, setZeroFlag } from "../flags";
 
 export const execBit = (cpu: cpuType, addressMode: addressModes): void => {
     exec(cpu, addressMode);

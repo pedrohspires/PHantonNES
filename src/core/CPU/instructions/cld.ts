@@ -1,5 +1,5 @@
 import { cpuType } from "../../../types/cpu.d";
-import { clearDecimalFlag } from "../flags";
+import { clearDecimalFlag } from "../../../utils/flags";
 
 export const execCld = (cpu: cpuType): void => {
     exec(cpu);

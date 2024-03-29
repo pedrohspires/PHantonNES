@@ -1,7 +1,7 @@
 import { addressModes } from "../../../types/address.d";
 import { cpuType } from "../../../types/cpu.d";
+import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../../../utils/flags";
 import { addressResolve } from "../address";
-import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../flags";
 
 export const execOra = (cpu: cpuType, addressMode: addressModes): void => {
     exec(cpu, addressMode);

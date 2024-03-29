@@ -1,5 +1,5 @@
 import { cpuType } from "../../../types/cpu.d";
-import { clearInterruptFlag } from "../flags";
+import { clearInterruptFlag } from "../../../utils/flags";
 
 export const execCli = (cpu: cpuType): void => {
     exec(cpu);

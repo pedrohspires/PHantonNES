@@ -1,4 +1,4 @@
-import { cpuType } from "../../types/cpu.d";
+import { cpuType } from "../types/cpu.d";
 
 // Flag: C
 export const setCarryFlag = (cpu: cpuType) => {

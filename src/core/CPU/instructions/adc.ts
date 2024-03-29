@@ -1,8 +1,8 @@
 import { addressModes } from "../../../types/address.d";
 import { cpuType } from "../../../types/cpu.d";
+import { clearCarryFlag, clearNegativeFlag, clearOverflowFlag, clearZeroFlag, setCarryFlag, setNegativeFlag, setOverflowFlag, setZeroFlag } from "../../../utils/flags";
 import { isOverflow } from "../../../utils/validations";
 import { addressResolve } from "../address";
-import { clearCarryFlag, clearNegativeFlag, clearOverflowFlag, clearZeroFlag, setCarryFlag, setNegativeFlag, setOverflowFlag, setZeroFlag } from "../flags";
 
 export const execAdc = (cpu: cpuType, addressMode: addressModes): void => {
     exec(cpu, addressMode);

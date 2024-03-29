@@ -1,6 +1,6 @@
 import { cpuType } from "../../../types/cpu.d";
 import { getCombinedAddress } from "../../../utils/address";
-import { setInterruptFlag } from "../flags";
+import { setInterruptFlag } from "../../../utils/flags";
 import { updateMemoryMap } from "../memory";
 
 export const execBrk = (cpu: cpuType): void => {

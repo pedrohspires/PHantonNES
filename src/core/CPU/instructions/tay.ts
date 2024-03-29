@@ -1,5 +1,5 @@
 import { cpuType } from "../../../types/cpu.d";
-import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../flags";
+import { clearNegativeFlag, clearZeroFlag, setNegativeFlag, setZeroFlag } from "../../../utils/flags";
 
 export const execTay = (cpu: cpuType): void => {
     exec(cpu);
