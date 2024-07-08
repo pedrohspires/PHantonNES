@@ -1,6 +1,6 @@
 import { cpuType } from "../../../types/cpu.d";
-import { addressResolve } from "../address";
-import { updateMemoryMap } from "../memory";
+import { addressResolve } from "../../../utils/address";
+import { updateMemoryMap } from "../../../utils/memory";
 
 export const execJsr = (cpu: cpuType): void => {
     exec(cpu);

@@ -1,6 +1,6 @@
 import { addressModes } from "../../../types/address.d";
 import { cpuType } from "../../../types/cpu.d";
-import { addressResolve } from "../address";
+import { addressResolve } from "../../../utils/address";
 
 export const execJmp = (cpu: cpuType, addressMode: addressModes): void => {
     exec(cpu, addressMode);

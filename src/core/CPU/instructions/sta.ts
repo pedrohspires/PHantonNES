@@ -1,7 +1,7 @@
 import { addressModes } from "../../../types/address.d";
 import { cpuType } from "../../../types/cpu.d";
-import { addressResolve } from "../address";
-import { updateMemoryMap } from "../memory";
+import { addressResolve } from "../../../utils/address";
+import { updateMemoryMap } from "../../../utils/memory";
 
 export const execSta = (cpu: cpuType, addressMode: addressModes): void => {
     exec(cpu, addressMode);
