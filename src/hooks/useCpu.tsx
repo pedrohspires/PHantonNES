@@ -37,7 +37,18 @@ const useCpu = (): Return => {
     const [rom, setRom] = useState<Uint8Array>(new Uint8Array());
     const cpuInternal = cpuInitialState;
 
+    const isNesRom = (rom: Uint8Array) => {
+        return (
+            rom[0x00] == 0x4e &&
+            rom[0x01] == 0x45 &&
+            rom[0x02] == 0x53 &&
+            rom[0x03] == 0x1a
+        )
+    }
+
     const getInitialStateCpu = (cpu: cpuType, rom: Uint8Array) => {
+        if (!isNesRom(rom)) return;
+
         const pgrLength = rom[4];
         const _16bits = 16384;
         const hasTrainer = !!(rom[6] >> 1 & 1);

@@ -15,10 +15,10 @@ export const readSecondArgument = (cpu: cpuType) => {
 }
 
 export const getNumberFromSignedByte = (byte: number) => {
-    if ((byte >> 7) === 0) {
-        return byte;
+    if (byte & 0x80) {  // verifica o bit de sinal
+        return byte - 256;  // ajusta para valores negativos
     } else {
-        return 0 - byte & 0x7F;
+        return byte;  // valor positivo
     }
 }
 
