@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { instructions } from "../core/CPU/instructions";
 import { cpuType } from "../types/cpu.d";
-import { formatNumber } from "../utils/format";
+import { _16kb } from "../utils/constants";
 
 type Return = {
     cpu: cpuType,
@@ -35,7 +35,6 @@ const useCpu = (): Return => {
     const [isDebug, setIsDebug] = useState<boolean>(true);
     const [romLoaded, setRomLoaded] = useState<boolean>(false);
     const [rom, setRom] = useState<Uint8Array>(new Uint8Array());
-    const cpuInternal = cpuInitialState;
 
     const isNesRom = (rom: Uint8Array) => {
         return (
@@ -47,31 +46,36 @@ const useCpu = (): Return => {
     }
 
     const getInitialStateCpu = (cpu: cpuType, rom: Uint8Array) => {
-        if (!isNesRom(rom)) return;
+        cpu = cpuInitialState;
 
         const pgrLength = rom[4];
-        const _16bits = 16384;
         const hasTrainer = !!(rom[6] >> 1 & 1);
-        const startPgr = hasTrainer ? 529 : 16;
-        const pgrBanks = rom.slice(startPgr, _16bits * pgrLength + startPgr);
+        const startPgr = hasTrainer ? 528 : 16;
 
-        cpu = cpuInitialState;
+        const pgrBanks = rom.slice(startPgr, _16kb * pgrLength + startPgr);
+
+        const startMemory = cpu.memory.slice(0, 0x8000);
+        const endMemory = cpu.memory.slice(_16kb * pgrLength);
+
+        if (pgrLength == 0x01) {
+            // Mudar quando for implementar Maper diferente de 0 (PGR espelhada)
+            cpu.memory = [...cpu.memory.slice(0, 0xc000), ...pgrBanks, ...pgrBanks];
+            cpu.pc = (cpu.memory[0xfffd] << 8) | cpu.memory[0xfffc];
+
+            setCpu({ ...cpu, });
+            return;
+        }
+
         cpu.memory = [
-            ...cpu.memory.slice(0, 0x8000),
-            ...pgrBanks.slice(0, 2 * _16bits + 1),
-            ...cpu.memory.slice(pgrLength * _16bits + 1, 0x10000)
-        ]
-
-        if (pgrLength == 1)
-            cpu.memory = [...cpu.memory.slice(0, 0xc000), ...pgrBanks];
-
-        cpu.pc = (cpu.memory[0xfffd] << 8) | cpu.memory[0xfffc];
-        setCpu({ ...cpu, });
+            ...startMemory,
+            ...pgrBanks,
+            ...endMemory
+        ];
     }
 
     const loadRom = (rom: Uint8Array) => {
-        if (rom[0] == 78 && rom[1] == 69 && rom[2] == 83) {
-            getInitialStateCpu(cpuInternal, rom);
+        if (isNesRom(rom)) {
+            getInitialStateCpu(cpu, rom);
 
             setRom(rom);
             setRomLoaded(true);
@@ -84,7 +88,7 @@ const useCpu = (): Return => {
         if (timeSinceLastFrame >= frameDuration) {
             lastFrameTime = currentTime;
 
-            execOpCode(cpuInternal.memory[cpuInternal.pc]);
+            execOpCode(cpu.memory[cpu.pc]);
         }
 
         requestAnimationFrame(loop);
@@ -93,15 +97,13 @@ const useCpu = (): Return => {
     const execOpCode = (opCode: number) => {
         const opCodeFunction = instructions[opCode];
 
-        console.log(formatNumber(opCode, 2), ": ", opCodeFunction)
-
-        opCodeFunction(cpuInternal);
-        setCpu({ ...cpuInternal });
+        opCodeFunction(cpu);
+        setCpu({ ...cpu });
     }
 
-    const nextStep = () => romLoaded && execOpCode(cpuInternal.memory[cpuInternal.pc])
+    const nextStep = () => romLoaded && execOpCode(cpu.memory[cpu.pc])
     const init = () => requestAnimationFrame(loop);
-    const reset = () => getInitialStateCpu(cpuInternal, rom);
+    const reset = () => getInitialStateCpu(cpu, rom);
 
     return {
         cpu,

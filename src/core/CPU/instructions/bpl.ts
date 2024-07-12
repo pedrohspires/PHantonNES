@@ -11,8 +11,6 @@ const exec = (cpu: cpuType) => {
 
     if (!negative) {
         let oldPc = cpu.pc;
-        console.log(readFirstArgument(cpu).toString(16))
-        console.log(getNumberFromSignedByte(readFirstArgument(cpu)).toString(16))
         cpu.pc += getNumberFromSignedByte(readFirstArgument(cpu));
         cpu.clock += (formatNumber(oldPc).substring(0, 2) != formatNumber(cpu.pc).substring(0, 2) ? 3 : 1); // 2 + 1 pelo sucesso + 2 se foi para nova página
     }

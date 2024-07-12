@@ -27,7 +27,7 @@ mídias não oficiais.
    * Pilha: um espaço na memória, geralmente usada para guardar endereços de memória ao fazer uma ramificação (Branch) no código. Ao todo são 255 bytes reservados para ela.
    * Stack Pointer: serve para apontar o topo da pilha. Um registrador de 1 byte.
    * Flags: o 6502 utiliza flags para indicar o status atual do processador. É representado com 1 byte, ou seja, 8 flags diferentes -1 flag que não é utilizada.
-   * Program Counter: serve para indicar qual espaço de memória está sendo utilizado no momento. É um registrador de 2 bytes.
+   * Program Counter: serve para indicar o local na memória da próxima instrução. É um registrador de 2 bytes.
    * Clock: uma forma de controlar a execução do programa.
 
 PPU (ainda não implementada) - um microprocessador usado para a gerar gráficos
