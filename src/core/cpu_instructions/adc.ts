@@ -1,24 +1,27 @@
 import type { addressModeType, cpuType } from "../../types/cpu.d";
 
 function execAdc(cpu: cpuType, address_mode: addressModeType) {
-    let valueToAdc = 0x00;
-    const memory_value = cpu.getByteMemory();
+    const memory_address = cpu.addressModeResolve(address_mode);
+    const prev_a = cpu.a;
+    cpu.a += address_mode == "immediate"
+        ? memory_address
+        : cpu.getByteMemory(memory_address);
 
-    if (address_mode == "immediate")
-        valueToAdc = memory_value;
+    if (cpu.a > 0xff) {
+        cpu.a %= 0xff;
+        cpu.setCarryFlag();
+    } else cpu.clearCarryFlag();
 
-    if (address_mode == "zero_page")
-        valueToAdc = cpu.getByteMemory(memory_value);
+    if (cpu.a == 0x00) cpu.setZeroFlag();
+    else cpu.clearZeroFlag();
 
-    if (address_mode == "zero_page_x") {
-        valueToAdc = cpu.getByteMemory(memory_value + cpu.x);
-        cpu.pc++;
-    }
+    if ((prev_a ^ cpu.a) & ~(prev_a ^ cpu.getByteMemory(memory_address)) & 0x80) cpu.setOverflowFlag();
+    else cpu.clearOverflowFlag();
 
-    if (address_mode == "absolute") {
-        valueToAdc = cpu.getByteMemory(memory_value + cpu.x);
-        cpu.pc++;
-    }
+    if (cpu.a >> 7) cpu.setNegativeFlag();
+    else cpu.clearNegativeFlag();
+
+    console.log(cpu)
 }
 
 const adc = {

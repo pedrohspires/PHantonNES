@@ -1,29 +1,9 @@
-import { exec_cpu_instruction } from "./core/cpu";
-import type { cpuType } from "./types/cpu.d";
+import cpu, { exec_cpu_instruction } from "./core/cpu";
 import { _16kb } from "./utils/constants";
 
 function App() {
 	let isRunning = false;
-	const cpu: cpuType = {
-		a: 0x00,
-		x: 0x00,
-		y: 0x00,
-		pc: 0xc000,
-		sp: 0x01ff,
-		p: 0b11100100, // NV-BDIZC
-		memory: new Array(0xffff).fill(0),
-		getByteMemory: function (memory_address) {
-			if (memory_address) {
-				this.pc++;
-				return this.memory[memory_address];
-			}
 
-			return this.memory[this.pc++];
-		},
-		getOpCode: function () {
-			return this.memory[this.pc++];
-		}
-	}
 
 	function handleLoadRom(event: React.ChangeEvent<HTMLInputElement>) {
 		event.preventDefault();
