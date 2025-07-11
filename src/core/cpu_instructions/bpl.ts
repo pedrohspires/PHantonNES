@@ -2,7 +2,7 @@ import type { cpuType } from "../../types/cpu.d";
 
 function execBpl(cpu: cpuType) {
     cpu.clk += 2;
-    const memory_value = cpu.getByteMemory();
+    const memory_value = cpu.getByteMemory(undefined, true);
     if (!(cpu.p & 0b10000000)) {
         const old_pc = cpu.pc;
         cpu.pc += memory_value;
@@ -14,7 +14,7 @@ function execBpl(cpu: cpuType) {
 }
 
 const bpl = {
-    0xd0: (cpu: cpuType) => execBpl(cpu),
+    0x10: (cpu: cpuType) => execBpl(cpu),
 }
 
 export default bpl;

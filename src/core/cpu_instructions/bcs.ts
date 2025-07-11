@@ -2,7 +2,7 @@ import type { cpuType } from "../../types/cpu.d";
 
 function execBcs(cpu: cpuType) {
     cpu.clk += 2;
-    const memory_value = cpu.getByteMemory();
+    const memory_value = cpu.getByteMemory(undefined, true);
     if (cpu.p & 0b00000001) {
         const old_pc = cpu.pc;
         cpu.pc += memory_value;

@@ -24,11 +24,14 @@ const cpu: cpuType = {
     clk: 0x0000,
     memory: new Array(0xffff).fill(0),
 
-    getByteMemory: function (memory_address) {
-        if (memory_address)
-            return this.memory[memory_address];
+    getByteMemory: function (memory_address, signed) {
+        if (memory_address) {
+            const byte = this.memory[memory_address];
+            return signed ? byte - 0x100 : byte;
+        }
 
-        return this.memory[this.pc++];
+        const byte = this.memory[this.pc++];
+        return signed ? byte - 0x100 : byte;
     },
     setByteMemory: function (memory_address, memory_value) {
         this.memory[memory_address] = memory_value;

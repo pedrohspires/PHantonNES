@@ -1,9 +1,11 @@
+import { useState } from "react";
 import cpu, { exec_cpu_instruction } from "./core/cpu";
+import type { cpuType } from "./types/cpu.d";
 import { _16kb } from "./utils/constants";
 
 function App() {
-	let isRunning = false;
-
+	const [currentCpu, setCurrentCpu] = useState<cpuType>(cpu);
+	const [endereco, setEndereco] = useState<number>(0);
 
 	function handleLoadRom(event: React.ChangeEvent<HTMLInputElement>) {
 		event.preventDefault();
@@ -15,8 +17,7 @@ function App() {
 				if (event.target?.result) {
 					const rom = new Uint8Array(event.target?.result as ArrayBuffer);
 					changeCpuMemory(rom);
-					isRunning = true;
-					loop();
+					init();
 				}
 			}
 
@@ -52,17 +53,71 @@ function App() {
 		}
 	}
 
-	function loop() {
-		// while (isRunning) {
-		exec_cpu_instruction(cpu);
-		// }
+	function loop(cyclesPerFrame: number) {
+		for (let cycle = 0; cycle < cyclesPerFrame; cycle++) {
+			exec_cpu_instruction(cpu);
+			setCurrentCpu({ ...cpu });
+		}
+
+
+		requestAnimationFrame(() => loop(cyclesPerFrame));
+	}
+
+	function init() {
+		const cyclesPerFrame = (1.79 * 1000000) / 60;
+		loop(cyclesPerFrame);
 	}
 
 	return (
 		<>
 			<div className="grid w-screen h-screen place-items-center">
-				<button type="button" onClick={() => document.getElementById("load_rom_input")?.click()}>Carregar ROM</button>
-				<input id="load_rom_input" className="hidden" type="file" onChange={handleLoadRom} accept=".nes" />
+				<div className="max-w-7xl">
+					<p>Instrução atual: <b>${currentCpu.pc.toString(16)}: ${currentCpu.memory[currentCpu.pc].toString(16)} - ${currentCpu.memory[currentCpu.pc + 1].toString(16)} - ${currentCpu.memory[currentCpu.pc + 2].toString(16)}</b></p>
+					<p>A: <b>${currentCpu.a.toString(16)}</b></p>
+					<p>X: <b>${currentCpu.x.toString(16)}</b></p>
+					<p>Y: <b>${currentCpu.y.toString(16)}</b></p>
+					<p>SP: <b>${currentCpu.sp.toString(16)}</b></p>
+					<p>P: <b>${currentCpu.p.toString(2)}</b></p>
+
+					<div>
+						<label htmlFor="consultar">Consultar endereço: </label>
+						<input id="consultar" value={endereco.toString(16)} onChange={e => setEndereco(Number("0x" + (e.target.value || 0)))} />
+						<span>Valor: {cpu.memory[endereco].toString(16)} - {cpu.memory[endereco + 1].toString(16)} - {cpu.memory[endereco + 2].toString(16)}</span>
+					</div>
+
+					<div>
+						<p>Memória: </p>
+						<div className="flex flex-wrap gap-2">
+							{currentCpu.memory.slice(0xc000, 0xc0ff).map((x, i) => (<div key={i}>
+								<div>
+									<p>{(i + 0xc000).toString(16)}</p>
+									{x.toString(16)}
+								</div>
+							</div>))}
+						</div>
+					</div>
+				</div>
+
+				<div className="space-x-4">
+					<button
+						type="button"
+						onClick={() => document.getElementById("load_rom_input")?.click()}
+						className="px-4 py-2 bg-gray-500 rounded-lg cursor-pointer"
+					>
+						Carregar ROM
+					</button>
+
+					<input id="load_rom_input" className="hidden" type="file" onChange={handleLoadRom} accept=".nes" />
+
+					<button
+						type="button"
+						// onClick={testes}
+						onClick={() => loop(1)}
+						className="px-4 py-2 bg-green-500 rounded-lg cursor-pointer"
+					>
+						Próxima instrução
+					</button>
+				</div>
 			</div>
 		</>
 	)

@@ -16,7 +16,7 @@ export type cpuType = {
      *                       retorna o valor no endereço fornecido, caso contrário, retorna o valor indicado por PC;
      * @returns Retorna o número contido na memória
      */
-    getByteMemory: (memory_address?: number) => number;
+    getByteMemory: (memory_address?: number, signed?: boolean) => number;
 
     /**
      * Busca um número na memória através de um endereço fornecido ou do PC. 

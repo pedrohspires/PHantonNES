@@ -2,7 +2,7 @@ import type { cpuType } from "../../types/cpu.d";
 
 function execBne(cpu: cpuType) {
     cpu.clk += 2;
-    const memory_value = cpu.getByteMemory();
+    const memory_value = cpu.getByteMemory(undefined, true);
     if (!(cpu.p & 0b00000010)) {
         const old_pc = cpu.pc;
         cpu.pc += memory_value;
