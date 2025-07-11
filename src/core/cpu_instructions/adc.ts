@@ -7,8 +7,7 @@ function execAdc(cpu: cpuType, address_mode: addressModeType) {
         ? memory_address
         : cpu.getByteMemory(memory_address);
 
-    if (cpu.p & 0b00000001)
-        cpu.a++;
+    cpu.a += cpu.p & 0b00000001;
 
     if (cpu.a > 0xff) {
         cpu.a %= 0x100;
