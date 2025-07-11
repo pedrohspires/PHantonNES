@@ -7,8 +7,11 @@ function execAdc(cpu: cpuType, address_mode: addressModeType) {
         ? memory_address
         : cpu.getByteMemory(memory_address);
 
+    if (cpu.p & 0b00000001)
+        cpu.a++;
+
     if (cpu.a > 0xff) {
-        cpu.a %= 0xff;
+        cpu.a %= 0x100;
         cpu.setCarryFlag();
     } else cpu.clearCarryFlag();
 
@@ -20,8 +23,6 @@ function execAdc(cpu: cpuType, address_mode: addressModeType) {
 
     if (cpu.a >> 7) cpu.setNegativeFlag();
     else cpu.clearNegativeFlag();
-
-    console.log(cpu)
 }
 
 const adc = {

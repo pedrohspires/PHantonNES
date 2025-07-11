@@ -8,6 +8,15 @@ export type cpuType = {
     clk: number;
     memory: Array<number>;
 
+    /**
+     * Busca um número na memória através de um endereço fornecido ou do PC. 
+     * - +1 ao PC se não fornecer memory_address.
+     * 
+     * @param memory_address Endereço para buscar dados na memória. Opcional, caso seja fornecido, 
+     *                       retorna o valor no endereço fornecido, caso contrário, retorna o valor indicado por PC;
+     * @returns Retorna o número contido na memória
+     */
+    getByteMemory: (memory_address?: number) => number;
 
     /**
      * Busca um número na memória através de um endereço fornecido ou do PC. 
@@ -17,7 +26,7 @@ export type cpuType = {
      *                       retorna o valor no endereço fornecido, caso contrário, retorna o valor indicado por PC;
      * @returns Retorna o número contido na memória
      */
-    getByteMemory: (memory_byte?: number) => number;
+    setByteMemory: (memory_address: number, memory_value: number) => void;
 
     /**
      * Retorna o OP Code da próxima instrução. Ex: 0x69 => ADC Immediate
@@ -42,7 +51,7 @@ export type cpuType = {
      * @param address_mode Modo do endereçamento da instrução.
      * @returns Valor na memória no endereço formado.
      */
-    addressModeResolve: (address_mode: addressModeType) => number;
+    addressModeResolve: (address_mode: addressModeType, ignorePageCrossed?: boolean) => number;
 
     setCarryFlag: () => void;
     setZeroFlag: () => void;
@@ -59,9 +68,13 @@ export type cpuType = {
     clearBreakFlag: () => void;
     clearOverflowFlag: () => void;
     clearNegativeFlag: () => void;
+
+    pushStack: (value: number) => void;
+    pullStack: () => number;
 }
 
 export type addressModeType =
     "immediate" | "zero_page" | "zero_page_x" |
     "zero_page_y" | "absolute" | "absolute_x" |
-    "absolute_y" | "indirect_x" | "indirect_y";
+    "absolute_y" | "indirect_x" | "indirect_y" |
+    "accumulator" | "relative" | "indirect";

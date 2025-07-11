@@ -30,13 +30,16 @@ const cpu: cpuType = {
 
         return this.memory[this.pc++];
     },
+    setByteMemory: function (memory_address, memory_value) {
+        this.memory[memory_address] = memory_value;
+    },
     getOpCode: function () {
         return this.memory[this.pc++];
     },
-    addressModeResolve: function (address_mode) {
-        const arg1 = this.getByteMemory();
+    addressModeResolve: function (address_mode, ignorePageCrossed) {
+        const arg1 = address_mode != "accumulator" ? this.getByteMemory() : 0;
 
-        if (address_mode == "immediate")
+        if (address_mode == "immediate" || address_mode == "accumulator")
             this.clk += 2;
 
         if (address_mode == "zero_page") {
@@ -66,7 +69,7 @@ const cpu: cpuType = {
             const arg = arg2 << 8 | arg1;
             const memory_address = arg + this.x;
 
-            if (memory_address >> 8 != arg >> 8)
+            if (memory_address >> 8 != arg >> 8 && !ignorePageCrossed)
                 this.clk++; // page crossed
 
             return memory_address;
@@ -78,7 +81,7 @@ const cpu: cpuType = {
             const arg = arg2 << 8 | arg1;
             const memory_address = arg + this.y;
 
-            if (memory_address >> 8 != arg >> 8)
+            if (memory_address >> 8 != arg >> 8 && !ignorePageCrossed)
                 this.clk++; // page crossed
 
             return memory_address;
@@ -101,7 +104,7 @@ const cpu: cpuType = {
             const arg = msb << 8 | lsb;
             const memory_address = arg + this.y;
 
-            if (memory_address >> 8 != arg >> 8)
+            if (memory_address >> 8 != arg >> 8 && !ignorePageCrossed)
                 this.clk++; // page crossed
 
             return memory_address;
@@ -153,6 +156,13 @@ const cpu: cpuType = {
     clearNegativeFlag: function () {
         this.p = this.p & 0b01111111
     },
+
+    pushStack: function (value) {
+        this.memory[this.sp--] = value;
+    },
+    pullStack: function () {
+        return this.memory[++this.sp];
+    }
 }
 
 export default cpu;
