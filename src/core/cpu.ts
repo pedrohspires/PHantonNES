@@ -69,6 +69,11 @@ const cpu: cpuType = {
             for (let i = memory_address + 8; i < 0x3fff; i += 8)
                 this.memory[i] = memory_value;
         }
+
+        if (memory_address == 0x2007) {
+            for (let i = 0x2006; i < 0x3fff; i += 8)
+                this.memory[i] += this.memory[0x2000] & 0b00000010 ? 32 : 1;
+        }
     },
     getOpCode: function () {
         const op_code = this.memory[this.pc++];

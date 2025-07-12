@@ -1,22 +1,52 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import cpu, { exec_cpu_instruction } from "./core/cpu";
 import ppu, { exec_ppu_instruction } from "./core/ppu";
-import type { cpuType } from "./types/cpu.d";
-import { _16kb } from "./utils/constants";
-
-const modules: any = import.meta.glob('./core/cpu_instructions/*.ts', { eager: true });
-const cpuInstructions: any = {};
-
-for (const path in modules) {
-	const keys = Object.keys(modules[path]?.default);
-	keys.forEach(key => cpuInstructions[key] = modules[path]?.default[key]);
-}
+import { _16kb, height, width } from "./utils/constants";
 
 function App() {
-	const [currentCpu, setCurrentCpu] = useState<cpuType>(cpu);
-	const [endereco, setEndereco] = useState<number>(0);
-	const [qtdInstrucoes, setQtdInstrucoes] = useState<number>(0);
+	useEffect(() => {
+		const screen = document.getElementById("screen") as any;
+		const ctx = screen.getContext("2d");
 
+		const scale = 2;
+		screen.style.width = (screen.width * scale) + "px";
+		screen.style.height = (screen.height * scale) + "px";
+
+		ctx.imageSmoothingEnabled = false;
+
+		const imageData = ctx.createImageData(width, height);
+		const pixels = imageData.data;
+
+		function setPixel(x: number, y: number, r: number, g: number, b: number, a = 255) {
+			const index = (y * width + x) * 4;
+			pixels[index + 0] = r;
+			pixels[index + 1] = g;
+			pixels[index + 2] = b;
+			pixels[index + 3] = a;
+		}
+
+		function drawn_pixel(x: number, y: number, r: number, g: number, b: number, a = 255) {
+			setPixel(x, y, r, g, b, a);
+			ctx.putImageData(imageData, 0, 0);
+		}
+
+		function clear_screen() {
+			for (let y = 0; y < height; y++)
+				for (let x = 0; x < width; x++)
+					setPixel(x, y, 0, 0, 0);
+
+			ctx.putImageData(imageData, 0, 0);
+		}
+
+		ppu.setScreen({
+			clearScreen: clear_screen,
+			drawnPixel: drawn_pixel
+		});
+
+		ppu.scr?.clearScreen();
+	}, []);
+
+	//#region Emulador
 	function handleLoadRom(event: React.ChangeEvent<HTMLInputElement>) {
 		event.preventDefault();
 
@@ -27,7 +57,6 @@ function App() {
 				if (event.target?.result) {
 					const rom = new Uint8Array(event.target?.result as ArrayBuffer);
 					changeCpuMemory(rom);
-					setCurrentCpu({ ...cpu });
 					// init();
 				}
 			}
@@ -66,8 +95,7 @@ function App() {
 
 	function exec() {
 		exec_cpu_instruction(cpu);
-		exec_ppu_instruction(ppu, cpu)
-		setCurrentCpu({ ...cpu });
+		exec_ppu_instruction(ppu, cpu);
 	}
 
 	function loop(cyclesPerFrame: number) {
@@ -81,38 +109,14 @@ function App() {
 		const cyclesPerFrame = (1.79 * 1000000) / 60;
 		loop(cyclesPerFrame);
 	}
+	//#endregion
 
 	return (
 		<>
 			<div className="grid w-screen h-screen place-items-center">
-				<div className="max-w-7xl">
-					<p>Instrução atual: <b>${currentCpu.pc.toString(16)}: ${currentCpu.memory[currentCpu.pc].toString(16)} - ${currentCpu.memory[currentCpu.pc + 1].toString(16)} - ${currentCpu.memory[currentCpu.pc + 2].toString(16)} - {cpuInstructions[currentCpu.memory[currentCpu.pc]].toString()}</b></p>
-					<p>A: <b>${currentCpu.a.toString(16)}</b></p>
-					<p>X: <b>${currentCpu.x.toString(16)}</b></p>
-					<p>Y: <b>${currentCpu.y.toString(16)}</b></p>
-					<p>SP: <b>${currentCpu.sp.toString(16)}</b></p>
-					<p>P: <b>${currentCpu.p.toString(2)}</b></p>
+				<div>
+					<canvas id="screen" width={width} height={height} style={{ imageRendering: "pixelated" }} />
 
-					<div>
-						<label htmlFor="consultar">Consultar endereço: </label>
-						<input id="consultar" value={endereco.toString(16)} onChange={e => setEndereco(Number("0x" + (e.target.value || 0)))} />
-						<span>Valor: {cpu.memory[endereco].toString(16)} - {cpu.memory[endereco + 1].toString(16)} - {cpu.memory[endereco + 2].toString(16)}</span>
-					</div>
-
-					<div>
-						<p>Memória: </p>
-						<div className="flex flex-wrap gap-2">
-							{currentCpu.memory.slice(0xc000, 0xc0ff).map((x, i) => (<div key={i}>
-								<div>
-									<p>{(i + 0xc000).toString(16)}</p>
-									{x.toString(16)}
-								</div>
-							</div>))}
-						</div>
-					</div>
-				</div>
-
-				<div className="space-x-4">
 					<button
 						type="button"
 						onClick={() => document.getElementById("load_rom_input")?.click()}
@@ -138,20 +142,6 @@ function App() {
 					>
 						Próxima instrução
 					</button>
-
-					<div>
-						<input id="qtd_instrucoes" value={qtdInstrucoes.toString(16)} onChange={e => setQtdInstrucoes(Number("0x" + (e.target.value || 0)))} />
-						<button
-							type="button"
-							onClick={() => {
-								for (let i = 0; i < qtdInstrucoes; i++)
-									exec();
-							}}
-							className="px-4 py-2 bg-yellow-500 rounded-lg cursor-pointer"
-						>
-							Executar {qtdInstrucoes} instruções
-						</button>
-					</div>
 				</div>
 			</div>
 		</>
