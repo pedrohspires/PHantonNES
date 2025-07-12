@@ -8,10 +8,25 @@ for (const path in modules) {
     keys.forEach(key => cpuInstructions[key] = modules[path]?.default[key]);
 }
 
-export function exec_cpu_instruction(cpu: cpuType) {
-    const op_code = cpu.getOpCode();
+export function exec_cpu_instruction(currentCpu: cpuType) {
+    if (currentCpu.memory[0x2002] & 0b1000000)
+        handle_nmi(currentCpu);
+
+    const op_code = currentCpu.getOpCode();
     const op_code_function = cpuInstructions[op_code];
-    op_code_function(cpu);
+    op_code_function(currentCpu);
+}
+
+function handle_nmi(currentCpu: cpuType) {
+    currentCpu.pushStack((currentCpu.pc >> 8) & 0xff);
+    currentCpu.pushStack(currentCpu.pc & 0xff);
+    currentCpu.pushStack(currentCpu.p & 0x11101111);
+
+    currentCpu.p |= 0b00000100;
+
+    const lsb = currentCpu.getByteMemory(0xfffa);
+    const msb = currentCpu.getByteMemory(0xfffb);
+    currentCpu.pc = msb << 8 | lsb;
 }
 
 const cpu: cpuType = {
@@ -27,17 +42,41 @@ const cpu: cpuType = {
     getByteMemory: function (memory_address, signed) {
         if (memory_address) {
             const byte = this.memory[memory_address];
-            return signed ? byte - 0x100 : byte;
+            return signed
+                ? byte < 0x80 ? byte : byte - 0x100
+                : byte;
         }
 
         const byte = this.memory[this.pc++];
-        return signed ? byte - 0x100 : byte;
+
+        if (this.pc > 0xffff)
+            this.pc %= 0x10000;
+
+        return signed
+            ? byte < 0x80 ? byte : byte - 0x100
+            : byte;
     },
     setByteMemory: function (memory_address, memory_value) {
         this.memory[memory_address] = memory_value;
+
+        if (memory_address < 0x0800) {
+            this.memory[memory_address + 0x0800] = memory_value;
+            this.memory[memory_address + 0x1000] = memory_value;
+            this.memory[memory_address + 0x1800] = memory_value;
+        }
+
+        if (memory_address >= 0x2000 && memory_address <= 0x2007) {
+            for (let i = memory_address + 8; i < 0x3fff; i += 8)
+                this.memory[i] = memory_value;
+        }
     },
     getOpCode: function () {
-        return this.memory[this.pc++];
+        const op_code = this.memory[this.pc++];
+
+        if (this.pc > 0xffff)
+            this.pc %= 0x10000;
+
+        return op_code;
     },
     addressModeResolve: function (address_mode, ignorePageCrossed) {
         const arg1 = address_mode != "accumulator" ? this.getByteMemory() : 0;

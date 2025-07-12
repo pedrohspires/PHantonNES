@@ -3,11 +3,13 @@ import type { addressModeType, cpuType } from "../../types/cpu.d";
 function execAdc(cpu: cpuType, address_mode: addressModeType) {
     const memory_address = cpu.addressModeResolve(address_mode);
     const prev_a = cpu.a;
-    cpu.a += address_mode == "immediate"
+    const memory_value = address_mode == "immediate"
         ? memory_address
         : cpu.getByteMemory(memory_address);
 
-    cpu.a += cpu.p & 0b00000001;
+    cpu.a += (memory_value + cpu.p & 0b00000001) % 0x100;
+
+    if (memory_address == 0x2002) cpu.memory[0x2002] &= 0b01111111;
 
     if (cpu.a > 0xff) {
         cpu.a %= 0x100;
@@ -17,7 +19,7 @@ function execAdc(cpu: cpuType, address_mode: addressModeType) {
     if (cpu.a == 0x00) cpu.setZeroFlag();
     else cpu.clearZeroFlag();
 
-    if ((prev_a ^ cpu.a) & ~(prev_a ^ cpu.getByteMemory(memory_address)) & 0x80) cpu.setOverflowFlag();
+    if ((prev_a ^ cpu.a) & ~(prev_a ^ memory_value) & 0x80) cpu.setOverflowFlag();
     else cpu.clearOverflowFlag();
 
     if (cpu.a >> 7) cpu.setNegativeFlag();

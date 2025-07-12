@@ -4,6 +4,9 @@ function execDex(cpu: cpuType) {
     cpu.clk += 2;
     cpu.x--;
 
+    if (cpu.x < 0)
+        cpu.x += 0x100;
+
     if (cpu.x == 0x00) cpu.setZeroFlag();
     else cpu.clearZeroFlag();
 

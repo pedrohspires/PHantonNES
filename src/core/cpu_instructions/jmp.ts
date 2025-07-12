@@ -14,6 +14,9 @@ function execJmp(cpu: cpuType, address_mode: addressModeType) {
     cpu.clk += 2;
     const indirect_lsb = cpu.getByteMemory(memory_address);
     const indirect_msb = cpu.getByteMemory(memory_address + 1);
+
+    if (memory_address == 0x2002 || memory_address + 1 == 0x2002) cpu.memory[0x2002] &= 0b01111111;
+
     cpu.pc = indirect_msb << 8 | indirect_lsb;
 }
 

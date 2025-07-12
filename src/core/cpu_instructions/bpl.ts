@@ -6,6 +6,7 @@ function execBpl(cpu: cpuType) {
     if (!(cpu.p & 0b10000000)) {
         const old_pc = cpu.pc;
         cpu.pc += memory_value;
+        cpu.pc %= 0x10000;
         cpu.clk++;
 
         if (cpu.pc >> 8 != old_pc >> 8)

@@ -4,6 +4,9 @@ function execDey(cpu: cpuType) {
     cpu.clk += 2;
     cpu.y--;
 
+    if (cpu.y < 0)
+        cpu.y += 0x100;
+
     if (cpu.y == 0x00) cpu.setZeroFlag();
     else cpu.clearZeroFlag();
 

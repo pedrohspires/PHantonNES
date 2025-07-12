@@ -4,6 +4,8 @@ function execInx(cpu: cpuType) {
     cpu.clk += 2;
     cpu.x++;
 
+    cpu.x %= 0x100;
+
     if (cpu.x == 0x00) cpu.setZeroFlag();
     else cpu.clearZeroFlag();
 

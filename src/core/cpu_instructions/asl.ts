@@ -8,6 +8,7 @@ function execAsl(cpu: cpuType, address_mode: addressModeType) {
         else cpu.clearCarryFlag();
 
         cpu.a = cpu.a << 1;
+        cpu.a %= 0x100;
 
         if (cpu.a >> 7) cpu.setNegativeFlag();
         else cpu.clearNegativeFlag();
@@ -16,8 +17,12 @@ function execAsl(cpu: cpuType, address_mode: addressModeType) {
         cpu.clk += address_mode == "absolute_x" ? 3 : 2;
 
         const memory_value = cpu.getByteMemory(memory_address);
-        const new_memory_value = memory_value << 1;
-        cpu.setByteMemory(memory_address, new_memory_value);
+        const new_memory_value = (memory_value << 1) % 0x100;
+
+        cpu.setByteMemory(
+            memory_address,
+            memory_address == 0x2002 ? new_memory_value & 0b01111111 : new_memory_value
+        )
 
         if (memory_value >> 7) cpu.setCarryFlag();
         else cpu.clearCarryFlag();

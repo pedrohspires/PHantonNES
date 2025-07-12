@@ -1,11 +1,21 @@
 import { useState } from "react";
 import cpu, { exec_cpu_instruction } from "./core/cpu";
+import ppu, { exec_ppu_instruction } from "./core/ppu";
 import type { cpuType } from "./types/cpu.d";
 import { _16kb } from "./utils/constants";
+
+const modules: any = import.meta.glob('./core/cpu_instructions/*.ts', { eager: true });
+const cpuInstructions: any = {};
+
+for (const path in modules) {
+	const keys = Object.keys(modules[path]?.default);
+	keys.forEach(key => cpuInstructions[key] = modules[path]?.default[key]);
+}
 
 function App() {
 	const [currentCpu, setCurrentCpu] = useState<cpuType>(cpu);
 	const [endereco, setEndereco] = useState<number>(0);
+	const [qtdInstrucoes, setQtdInstrucoes] = useState<number>(0);
 
 	function handleLoadRom(event: React.ChangeEvent<HTMLInputElement>) {
 		event.preventDefault();
@@ -17,7 +27,8 @@ function App() {
 				if (event.target?.result) {
 					const rom = new Uint8Array(event.target?.result as ArrayBuffer);
 					changeCpuMemory(rom);
-					init();
+					setCurrentCpu({ ...cpu });
+					// init();
 				}
 			}
 
@@ -53,12 +64,15 @@ function App() {
 		}
 	}
 
-	function loop(cyclesPerFrame: number) {
-		for (let cycle = 0; cycle < cyclesPerFrame; cycle++) {
-			exec_cpu_instruction(cpu);
-			setCurrentCpu({ ...cpu });
-		}
+	function exec() {
+		exec_cpu_instruction(cpu);
+		exec_ppu_instruction(ppu, cpu)
+		setCurrentCpu({ ...cpu });
+	}
 
+	function loop(cyclesPerFrame: number) {
+		for (let cycle = 0; cycle < cyclesPerFrame; cycle++)
+			exec();
 
 		requestAnimationFrame(() => loop(cyclesPerFrame));
 	}
@@ -72,7 +86,7 @@ function App() {
 		<>
 			<div className="grid w-screen h-screen place-items-center">
 				<div className="max-w-7xl">
-					<p>Instrução atual: <b>${currentCpu.pc.toString(16)}: ${currentCpu.memory[currentCpu.pc].toString(16)} - ${currentCpu.memory[currentCpu.pc + 1].toString(16)} - ${currentCpu.memory[currentCpu.pc + 2].toString(16)}</b></p>
+					<p>Instrução atual: <b>${currentCpu.pc.toString(16)}: ${currentCpu.memory[currentCpu.pc].toString(16)} - ${currentCpu.memory[currentCpu.pc + 1].toString(16)} - ${currentCpu.memory[currentCpu.pc + 2].toString(16)} - {cpuInstructions[currentCpu.memory[currentCpu.pc]].toString()}</b></p>
 					<p>A: <b>${currentCpu.a.toString(16)}</b></p>
 					<p>X: <b>${currentCpu.x.toString(16)}</b></p>
 					<p>Y: <b>${currentCpu.y.toString(16)}</b></p>
@@ -111,12 +125,33 @@ function App() {
 
 					<button
 						type="button"
-						// onClick={testes}
-						onClick={() => loop(1)}
+						onClick={init}
 						className="px-4 py-2 bg-green-500 rounded-lg cursor-pointer"
+					>
+						Iniciar
+					</button>
+
+					<button
+						type="button"
+						onClick={exec}
+						className="px-4 py-2 bg-blue-500 rounded-lg cursor-pointer"
 					>
 						Próxima instrução
 					</button>
+
+					<div>
+						<input id="qtd_instrucoes" value={qtdInstrucoes.toString(16)} onChange={e => setQtdInstrucoes(Number("0x" + (e.target.value || 0)))} />
+						<button
+							type="button"
+							onClick={() => {
+								for (let i = 0; i < qtdInstrucoes; i++)
+									exec();
+							}}
+							className="px-4 py-2 bg-yellow-500 rounded-lg cursor-pointer"
+						>
+							Executar {qtdInstrucoes} instruções
+						</button>
+					</div>
 				</div>
 			</div>
 		</>

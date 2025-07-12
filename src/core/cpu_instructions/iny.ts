@@ -4,6 +4,8 @@ function execIny(cpu: cpuType) {
     cpu.clk += 2;
     cpu.y++;
 
+    cpu.y %= 0x100;
+
     if (cpu.y == 0x00) cpu.setZeroFlag();
     else cpu.clearZeroFlag();
 

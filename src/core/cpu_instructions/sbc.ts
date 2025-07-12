@@ -7,7 +7,12 @@ function execSbc(cpu: cpuType, address_mode: addressModeType) {
         ? memory_address
         : cpu.getByteMemory(memory_address);
 
+    if (memory_address == 0x2002) cpu.memory[0x2002] &= 0b01111111;
+
     cpu.a -= value_to_subtract - (1 - (cpu.p & 0b00000001));
+
+    if (cpu.a < 0)
+        cpu.a += 0x100;
 
     if (cpu.a > 0xff) {
         cpu.a %= 0x100;
@@ -17,7 +22,7 @@ function execSbc(cpu: cpuType, address_mode: addressModeType) {
     if (cpu.a == 0x00) cpu.setZeroFlag();
     else cpu.clearZeroFlag();
 
-    if ((prev_a ^ cpu.a) & ~(prev_a ^ cpu.getByteMemory(memory_address)) & 0x80) cpu.setOverflowFlag();
+    if ((prev_a ^ cpu.a) & ~(prev_a ^ value_to_subtract) & 0x80) cpu.setOverflowFlag();
     else cpu.clearOverflowFlag();
 
     if (cpu.a >> 7) cpu.setNegativeFlag();

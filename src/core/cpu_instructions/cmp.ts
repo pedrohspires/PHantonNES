@@ -6,6 +6,8 @@ function execCmp(cpu: cpuType, address_mode: addressModeType) {
         ? memory_address
         : cpu.getByteMemory(memory_address);
 
+    if (memory_address == 0x2002) cpu.memory[0x2002] &= 0b01111111;
+
     if (cpu.a >= memory_value) cpu.setCarryFlag();
     else cpu.clearCarryFlag();
 

@@ -17,7 +17,11 @@ function execRor(cpu: cpuType, address_mode: addressModeType) {
 
         const memory_value = cpu.getByteMemory(memory_address);
         const new_memory_value = (memory_value >> 1) | (cpu.p & 0b10000000);
-        cpu.setByteMemory(memory_address, new_memory_value);
+
+        cpu.setByteMemory(
+            memory_address,
+            memory_address == 0x2002 ? new_memory_value & 0b01111111 : new_memory_value
+        )
 
         if (memory_value & 0b00000001) cpu.setCarryFlag();
         else cpu.clearCarryFlag();
